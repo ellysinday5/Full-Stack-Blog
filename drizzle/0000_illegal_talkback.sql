@@ -1,15 +1,15 @@
 CREATE TABLE "comments" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"post_id" integer NOT NULL,
-	"author_name" varchar(80) NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"post_id" uuid NOT NULL,
+	"author_name" text NOT NULL,
 	"body" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "posts" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"title" varchar(255) NOT NULL,
-	"slug" varchar(255) NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"title" text NOT NULL,
+	"slug" text NOT NULL,
 	"body" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "posts_slug_unique" UNIQUE("slug")
