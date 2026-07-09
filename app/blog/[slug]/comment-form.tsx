@@ -114,13 +114,19 @@ export function CommentForm({
 				{!isAnonymous && (
 					<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 						<div>
+							<label
+								htmlFor="authorName"
+								className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300"
+							>
+								Name <span className="text-red-500">*</span>
+							</label>
 							<input
 								id="authorName"
 								name="authorName"
 								type="text"
 								defaultValue={savedInfo.name}
 								className={inputClasses}
-								placeholder="Name *"
+								placeholder="Name"
 								required
 							/>
 							{state.errors?.authorName && (
@@ -131,13 +137,19 @@ export function CommentForm({
 						</div>
 
 						<div>
+							<label
+								htmlFor="email"
+								className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300"
+							>
+								Email <span className="text-red-500">*</span>
+							</label>
 							<input
 								id="email"
 								name="email"
 								type="email"
 								defaultValue={savedInfo.email}
 								className={inputClasses}
-								placeholder="Email *"
+								placeholder="Email"
 								required
 							/>
 							{state.errors?.email && (
@@ -148,6 +160,12 @@ export function CommentForm({
 						</div>
 
 						<div>
+							<label
+								htmlFor="website"
+								className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300"
+							>
+								Website
+							</label>
 							<input
 								id="website"
 								name="website"
@@ -173,12 +191,18 @@ export function CommentForm({
 				)}
 
 				<div>
+					<label
+						htmlFor="body"
+						className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300"
+					>
+						Comment <span className="text-red-500">*</span>
+					</label>
 					<textarea
 						id="body"
 						name="body"
 						rows={6}
 						className={`${inputClasses} resize-y`}
-						placeholder="Add Comment *"
+						placeholder="Add your comment here…"
 						required
 					/>
 					{state.errors?.body && (
