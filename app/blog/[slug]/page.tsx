@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { comments, posts } from "@/lib/db/schema";
 import { CommentForm } from "./comment-form";
 
 type PageProps = {
@@ -15,7 +15,8 @@ export default async function PostPage({ params }: PageProps) {
 		where: eq(posts.slug, slug),
 		with: {
 			comments: {
-				orderBy: (comments, { asc }) => [asc(comments.createdAt)],
+				where: eq(comments.approved, true),
+				orderBy: (c, { asc }) => [asc(c.createdAt)],
 			},
 		},
 	});

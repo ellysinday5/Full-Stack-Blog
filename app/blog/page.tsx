@@ -1,4 +1,4 @@
-import { count, desc, eq } from "drizzle-orm";
+import { arrayOverlaps, count, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
 import { db } from "@/lib/db";
@@ -65,22 +65,30 @@ function formatDate(date: Date): string {
 
 // ── Page ───────────────────────────────────────────────────────────────────
 
-export default async function BlogPage() {
-	const allPosts = await db.select().from(posts).orderBy(desc(posts.createdAt));
+type BlogPageProps = {
+	searchParams: Promise<{ tag?: string }>;
+};
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+	const { tag } = await searchParams;
+
+	// Filter by tag if provided, otherwise fetch all posts
+	const allPosts = tag
+		? await db
+				.select()
+				.from(posts)
+				.where(arrayOverlaps(posts.tags, [tag]))
+				.orderBy(desc(posts.createdAt))
+		: await db.select().from(posts).orderBy(desc(posts.createdAt));
+
+	// Collect all unique tags across every post for the sidebar
+	const allPostsForTags = await db.select({ tags: posts.tags }).from(posts);
+	const uniqueTags = Array.from(
+		new Set(allPostsForTags.flatMap((p) => p.tags)),
+	).sort();
 
 	const featuredPosts = allPosts.slice(0, 2);
 	const regularPosts = allPosts.slice(2);
-
-	// Unique categories derived from post-index cycling, preserving insertion order
-	const seen = new Set<string>();
-	const uniqueCategories: Category[] = [];
-	allPosts.forEach((_, i) => {
-		const cat = CATEGORIES[i % CATEGORIES.length];
-		if (!seen.has(cat)) {
-			seen.add(cat);
-			uniqueCategories.push(cat);
-		}
-	});
 
 	// Serialize dates so they can be safely passed to the Client Component
 	const serializedPosts = allPosts.map((p) => ({
@@ -96,8 +104,25 @@ export default async function BlogPage() {
 				<div className="flex gap-8">
 					{/* ─── Main Content ──────────────────────────────────────────── */}
 					<section className="min-w-0 flex-1">
+						{/* Active tag filter banner */}
+						{tag && (
+							<div className="mb-4 flex items-center gap-2">
+								<span className="text-sm text-muted-foreground">
+									Filtering by tag:
+								</span>
+								<span className="rounded-full bg-primary px-3 py-0.5 text-xs font-semibold text-primary-foreground">
+									{tag}
+								</span>
+								<Link
+									href="/blog"
+									className="text-xs text-muted-foreground underline hover:text-foreground"
+								>
+									Clear
+								</Link>
+							</div>
+						)}
 						{allPosts.length === 0 ? (
-							<EmptyState />
+							<EmptyState tag={tag} />
 						) : (
 							<>
 								{/* Featured pair — 2 columns, larger cards */}
@@ -118,7 +143,7 @@ export default async function BlogPage() {
 									</div>
 								)}
 
-								<Pagination />
+								{!tag && <Pagination />}
 							</>
 						)}
 					</section>
@@ -162,22 +187,27 @@ export default async function BlogPage() {
 							</div>
 						</SidebarSection>
 
-						{/* Categories */}
-						<SidebarSection title="Categories">
-							<ul className="space-y-2">
-								{uniqueCategories.map((cat) => (
-									<li key={cat}>
+						{/* Tags — driven by real DB data */}
+						{uniqueTags.length > 0 && (
+							<SidebarSection title="Tags">
+								<div className="flex flex-wrap gap-2">
+									{uniqueTags.map((t) => (
 										<Link
-											href={`/blog?category=${encodeURIComponent(cat)}`}
-											id={`category-${cat.replace(/[\s&]+/g, "-").toLowerCase()}`}
-											className="text-sm text-muted-foreground transition-colors hover:text-primary"
+											key={t}
+											href={`/blog?tag=${encodeURIComponent(t)}`}
+											id={`tag-${t}`}
+											className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+												tag === t
+													? "bg-primary text-primary-foreground"
+													: "bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground"
+											}`}
 										>
-											{cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
+											{t}
 										</Link>
-									</li>
-								))}
-							</ul>
-						</SidebarSection>
+									))}
+								</div>
+							</SidebarSection>
+						)}
 
 						{/* Decorative quote block */}
 						<div className="rounded bg-primary px-6 py-8 text-primary-foreground">
@@ -223,6 +253,7 @@ type PostRow = {
 	title: string;
 	slug: string;
 	body: string;
+	tags: string[];
 	createdAt: Date;
 };
 
@@ -293,10 +324,28 @@ function PostCard({
 						{formatDate(post.createdAt)}
 					</time>
 					<span>/</span>
-					<Suspense fallback={<span className="text-muted-foreground">Loading comments…</span>}>
+					<Suspense
+						fallback={
+							<span className="text-muted-foreground">Loading comments…</span>
+						}
+					>
 						<CommentCount postId={post.id} />
 					</Suspense>
 				</div>
+				{/* Tag chips */}
+				{post.tags.length > 0 && (
+					<div className="mt-2 flex flex-wrap gap-1">
+						{post.tags.map((t) => (
+							<Link
+								key={t}
+								href={`/blog?tag=${encodeURIComponent(t)}`}
+								className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+							>
+								{t}
+							</Link>
+						))}
+					</div>
+				)}
 			</div>
 		</article>
 	);
@@ -359,7 +408,7 @@ function Pagination() {
 	);
 }
 
-function EmptyState() {
+function EmptyState({ tag }: { tag?: string }) {
 	return (
 		<div
 			className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-24 text-center"
@@ -383,10 +432,16 @@ function EmptyState() {
 				</svg>
 			</div>
 			<p className="text-lg font-semibold text-card-foreground">
-				Nothing here yet
+				{tag ? `No posts tagged "${tag}"` : "Nothing here yet"}
 			</p>
 			<p className="mt-1.5 max-w-xs text-sm text-muted-foreground">
-				The first post hasn&apos;t been published. Check back soon.
+				{tag ? (
+					<Link href="/blog" className="underline hover:text-foreground">
+						View all posts
+					</Link>
+				) : (
+					"The first post hasn't been published. Check back soon."
+				)}
 			</p>
 		</div>
 	);
