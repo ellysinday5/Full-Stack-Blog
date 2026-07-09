@@ -11,14 +11,14 @@ type PageProps = {
 export default async function PostPage({ params }: PageProps) {
 	const { slug } = await params;
 
-  const post = await db.query.posts.findFirst({
-    where: eq(posts.slug, slug),
-    with: {
-      comments: {
-        orderBy: (comments, { asc }) => [asc(comments.createdAt)],
-      },
-    },
-  });
+	const post = await db.query.posts.findFirst({
+		where: eq(posts.slug, slug),
+		with: {
+			comments: {
+				orderBy: (comments, { asc }) => [asc(comments.createdAt)],
+			},
+		},
+	});
 
 	if (!post) {
 		notFound();
@@ -63,7 +63,7 @@ export default async function PostPage({ params }: PageProps) {
 							>
 								<div className="flex items-center justify-between">
 									<span className="font-medium text-[--color-ink]">
-										{comment.authorName}
+										{comment.isAnonymous ? "Anonymous" : comment.authorName}
 									</span>
 									<time
 										dateTime={comment.createdAt.toISOString()}

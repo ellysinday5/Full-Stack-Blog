@@ -4,7 +4,7 @@ export default function Loading() {
 			<article>
 				{/* Date Skeleton */}
 				<div className="h-4 w-32 animate-pulse rounded bg-neutral-200" />
-				
+
 				{/* Title Skeleton */}
 				<div className="mt-3 h-10 w-full animate-pulse rounded bg-neutral-200 sm:w-3/4" />
 				<div className="mt-2 h-10 w-2/3 animate-pulse rounded bg-neutral-200 sm:hidden" />

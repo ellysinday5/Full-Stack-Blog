@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const posts = pgTable("posts", {
 	id: uuid("id").primaryKey().defaultRandom(),
@@ -15,6 +15,9 @@ export const comments = pgTable("comments", {
 		.references(() => posts.id, { onDelete: "cascade" })
 		.notNull(),
 	authorName: text("author_name").notNull(),
+	email: text("email").notNull().default(""),
+	website: text("website"),
+	isAnonymous: boolean("is_anonymous").default(false).notNull(),
 	body: text("body").notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
