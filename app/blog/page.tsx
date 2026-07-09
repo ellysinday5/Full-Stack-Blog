@@ -1,7 +1,8 @@
-import { desc } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import Link from "next/link";
+import { Suspense } from "react";
 import { db } from "@/lib/db";
-import { posts } from "@/lib/db/schema";
+import { comments, posts } from "@/lib/db/schema";
 import SearchBox from "./_components/SearchBox";
 
 export const metadata = {
@@ -91,7 +92,7 @@ export default async function BlogPage() {
 
 	return (
 		<main className="min-h-screen bg-muted py-8">
-			<div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+			<div className="mx-auto max-w-300 px-4 sm:px-6">
 				<div className="flex gap-8">
 					{/* ─── Main Content ──────────────────────────────────────────── */}
 					<section className="min-w-0 flex-1">
@@ -123,7 +124,7 @@ export default async function BlogPage() {
 					</section>
 
 					{/* ─── Sidebar ───────────────────────────────────────────────── */}
-					<aside className="hidden w-[280px] shrink-0 space-y-8 lg:block">
+					<aside className="hidden w-70 shrink-0 space-y-8 lg:block">
 						{/* Live Search */}
 						<SidebarSection title="Live Search">
 							<SearchBox posts={serializedPosts} />
@@ -285,15 +286,34 @@ function PostCard({
 						{excerpt}
 					</Link>
 				</p>
-				<div className="mt-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+				<div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
 					<span className="text-foreground">John Doe</span>
 					<span>/</span>
 					<time dateTime={post.createdAt.toISOString()}>
 						{formatDate(post.createdAt)}
 					</time>
+					<span>/</span>
+					<Suspense fallback={<span className="text-muted-foreground">Loading comments…</span>}>
+						<CommentCount postId={post.id} />
+					</Suspense>
 				</div>
 			</div>
 		</article>
+	);
+}
+
+async function CommentCount({ postId }: { postId: string }) {
+	const [result] = await db
+		.select({ count: count() })
+		.from(comments)
+		.where(eq(comments.postId, postId));
+
+	const total = Number(result?.count ?? 0);
+
+	return (
+		<span className="text-muted-foreground">
+			{total === 1 ? "1 comment" : `${total} comments`}
+		</span>
 	);
 }
 

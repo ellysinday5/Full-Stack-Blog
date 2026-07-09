@@ -44,7 +44,7 @@ export function Footer() {
 		<footer className="bg-card text-card-foreground border-t border-border mt-auto">
 			{/* Trending Now Bar */}
 			<div className="bg-muted py-6">
-				<div className="mx-auto max-w-[1200px] px-4 flex items-center justify-between">
+				<div className="mx-auto max-w-300 px-4 flex items-center justify-between">
 					<div className="flex items-center gap-6 overflow-hidden">
 						<span className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider shrink-0">
 							Trending now
@@ -127,7 +127,7 @@ export function Footer() {
 				</div>
 			</div>
 
-			<div className="mx-auto max-w-[1200px] px-4 py-16">
+			<div className="mx-auto max-w-300 px-4 py-16">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
 					{/* Popular Posts Column */}
 					<div>
@@ -254,7 +254,7 @@ export function Footer() {
 
 			{/* Bottom Footer */}
 			<div className="border-t border-border">
-				<div className="mx-auto max-w-[1200px] px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+				<div className="mx-auto max-w-300 px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
 					<p className="text-sm text-muted-foreground">
 						All rights ahdkhsakdha
 					</p>
