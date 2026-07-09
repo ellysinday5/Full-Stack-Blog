@@ -90,8 +90,8 @@ export default async function BlogPage() {
 	}));
 
 	return (
-		<main className="min-h-screen bg-[#f5f6f7]">
-			<div className="mx-auto max-w-[1200px] px-4 py-8 sm:px-6">
+		<main className="min-h-screen bg-muted py-8">
+			<div className="mx-auto max-w-[1200px] px-4 sm:px-6">
 				<div className="flex gap-8">
 					{/* ─── Main Content ──────────────────────────────────────────── */}
 					<section className="min-w-0 flex-1">
@@ -149,10 +149,10 @@ export default async function BlogPage() {
 											/>
 										</div>
 										<div className="min-w-0">
-											<p className="line-clamp-2 text-sm font-semibold leading-snug text-gray-800 transition-colors group-hover:text-blue-600">
+											<p className="line-clamp-2 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
 												{post.title}
 											</p>
-											<p className="mt-1 text-xs text-gray-400">
+											<p className="mt-1 text-xs text-muted-foreground">
 												{formatDate(post.createdAt)}
 											</p>
 										</div>
@@ -169,7 +169,7 @@ export default async function BlogPage() {
 										<Link
 											href={`/blog?category=${encodeURIComponent(cat)}`}
 											id={`category-${cat.replace(/[\s&]+/g, "-").toLowerCase()}`}
-											className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+											className="text-sm text-muted-foreground transition-colors hover:text-primary"
 										>
 											{cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()}
 										</Link>
@@ -179,7 +179,7 @@ export default async function BlogPage() {
 						</SidebarSection>
 
 						{/* Decorative quote block */}
-						<div className="rounded bg-blue-600 px-6 py-8 text-white">
+						<div className="rounded bg-primary px-6 py-8 text-primary-foreground">
 							<div className="mb-3 font-serif text-5xl leading-none opacity-40">
 								&ldquo;
 							</div>
@@ -209,7 +209,7 @@ function SidebarSection({
 }) {
 	return (
 		<div>
-			<h3 className="mb-4 border-b border-gray-200 pb-2 text-sm font-bold uppercase tracking-widest text-gray-800">
+			<h3 className="mb-4 border-b border-border pb-2 text-sm font-bold uppercase tracking-widest text-foreground">
 				{title}
 			</h3>
 			{children}
@@ -240,10 +240,9 @@ function PostCard({
 
 	return (
 		<article
-			className="group bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
+			className="group bg-card shadow-sm transition-shadow duration-200 hover:shadow-md border border-border/50 rounded overflow-hidden"
 			id={`post-card-${post.id}`}
 		>
-			{/* Badge + Title (above image, matching Blocksy) */}
 			<div className="px-4 pt-4">
 				<span
 					className={`inline-block rounded-sm px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest ${CATEGORY_STYLES[category]}`}
@@ -251,7 +250,7 @@ function PostCard({
 					{category}
 				</span>
 				<h2
-					className={`mt-2 font-bold leading-snug text-gray-900 transition-colors duration-150 group-hover:text-blue-600 ${
+					className={`mt-2 font-bold leading-snug text-card-foreground transition-colors duration-150 group-hover:text-primary ${
 						featured ? "text-xl" : "text-[15px]"
 					}`}
 				>
@@ -281,13 +280,13 @@ function PostCard({
 				<p className="text-sm leading-relaxed">
 					<Link
 						href={`/blog/${post.slug}`}
-						className="text-blue-500 hover:underline"
+						className="text-muted-foreground hover:text-foreground hover:underline transition-colors"
 					>
 						{excerpt}
 					</Link>
 				</p>
-				<div className="mt-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-					<span className="text-gray-600">John Doe</span>
+				<div className="mt-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+					<span className="text-foreground">John Doe</span>
 					<span>/</span>
 					<time dateTime={post.createdAt.toISOString()}>
 						{formatDate(post.createdAt)}
@@ -305,21 +304,21 @@ function Pagination() {
 				type="button"
 				id="pagination-page-1"
 				aria-current="page"
-				className="flex h-9 w-9 items-center justify-center rounded bg-blue-600 text-sm font-semibold text-white"
+				className="flex h-9 w-9 items-center justify-center rounded bg-primary text-sm font-semibold text-primary-foreground"
 			>
 				1
 			</button>
 			<button
 				type="button"
 				id="pagination-page-2"
-				className="flex h-9 w-9 items-center justify-center rounded border border-gray-200 bg-white text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+				className="flex h-9 w-9 items-center justify-center rounded border border-border bg-card text-sm text-card-foreground hover:bg-muted transition-colors"
 			>
 				2
 			</button>
 			<button
 				type="button"
 				id="pagination-next"
-				className="flex h-9 items-center justify-center gap-1.5 rounded border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+				className="flex h-9 items-center justify-center gap-1.5 rounded border border-border bg-card px-4 text-sm font-semibold text-card-foreground hover:bg-muted transition-colors"
 			>
 				NEXT
 				<svg
@@ -343,13 +342,13 @@ function Pagination() {
 function EmptyState() {
 	return (
 		<div
-			className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-24 text-center"
+			className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-24 text-center"
 			id="empty-state"
 		>
-			<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
+			<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					className="h-6 w-6 text-gray-400"
+					className="h-6 w-6 text-muted-foreground"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
@@ -363,8 +362,10 @@ function EmptyState() {
 					/>
 				</svg>
 			</div>
-			<p className="text-lg font-semibold text-gray-800">Nothing here yet</p>
-			<p className="mt-1.5 max-w-xs text-sm text-gray-500">
+			<p className="text-lg font-semibold text-card-foreground">
+				Nothing here yet
+			</p>
+			<p className="mt-1.5 max-w-xs text-sm text-muted-foreground">
 				The first post hasn&apos;t been published. Check back soon.
 			</p>
 		</div>
