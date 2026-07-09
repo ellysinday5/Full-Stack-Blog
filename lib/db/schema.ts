@@ -6,6 +6,7 @@ export const posts = pgTable("posts", {
 	title: text("title").notNull(),
 	slug: text("slug").notNull().unique(),
 	body: text("body").notNull(),
+	tags: text("tags").array().default([]).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -19,6 +20,7 @@ export const comments = pgTable("comments", {
 	website: text("website"),
 	isAnonymous: boolean("is_anonymous").default(false).notNull(),
 	body: text("body").notNull(),
+	approved: boolean("approved").default(false).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
