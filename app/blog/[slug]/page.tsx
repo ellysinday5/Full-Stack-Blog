@@ -11,14 +11,14 @@ type PageProps = {
 export default async function PostPage({ params }: PageProps) {
 	const { slug } = await params;
 
-	const post = await db.query.posts.findFirst({
-		where: eq(posts.slug, slug),
-		with: {
-			comments: {
-				orderBy: (comments, { desc }) => [desc(comments.createdAt)],
-			},
-		},
-	});
+  const post = await db.query.posts.findFirst({
+    where: eq(posts.slug, slug),
+    with: {
+      comments: {
+        orderBy: (comments, { asc }) => [asc(comments.createdAt)],
+      },
+    },
+  });
 
 	if (!post) {
 		notFound();
