@@ -164,28 +164,74 @@ export function Header() {
 				<div className="flex items-center gap-8">
 					<nav className="hidden md:flex items-center gap-6 text-sm font-bold uppercase tracking-wide">
 						<div className="relative group">
-							<button type="button" className="hover:text-primary transition-colors flex items-center gap-1 py-4">
+							<button
+								type="button"
+								className="hover:text-primary transition-colors flex items-center gap-1 py-4"
+							>
 								Gutenberg Blocks
-								<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-									<path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+								<svg
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-3 w-3"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fillRule="evenodd"
+										d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+										clipRule="evenodd"
+									/>
 								</svg>
 							</button>
 							<div className="absolute left-0 top-full hidden w-48 flex-col rounded border border-border bg-card py-1 shadow-lg group-hover:flex z-50">
-								<Link href="/" className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors">Block Option 1</Link>
-								<Link href="/" className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors">Block Option 2</Link>
+								<Link
+									href="/"
+									className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors"
+								>
+									Block Option 1
+								</Link>
+								<Link
+									href="/"
+									className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors"
+								>
+									Block Option 2
+								</Link>
 							</div>
 						</div>
-						
+
 						<div className="relative group">
-							<button type="button" className="hover:text-primary transition-colors flex items-center gap-1 py-4">
+							<button
+								type="button"
+								className="hover:text-primary transition-colors flex items-center gap-1 py-4"
+							>
 								Pages
-								<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-									<path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+								<svg
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-3 w-3"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fillRule="evenodd"
+										d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+										clipRule="evenodd"
+									/>
 								</svg>
 							</button>
 							<div className="absolute left-0 top-full hidden w-48 flex-col rounded border border-border bg-card py-1 shadow-lg group-hover:flex z-50">
-								<Link href="/" className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors">Page Option A</Link>
-								<Link href="/" className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors">Page Option B</Link>
+								<Link
+									href="/"
+									className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors"
+								>
+									Page Option A
+								</Link>
+								<Link
+									href="/"
+									className="px-4 py-2 text-sm font-semibold capitalize text-foreground hover:bg-muted hover:text-primary transition-colors"
+								>
+									Page Option B
+								</Link>
 							</div>
 						</div>
 						<Link href="/" className="hover:text-primary transition-colors">
