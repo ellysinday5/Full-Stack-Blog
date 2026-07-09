@@ -12,7 +12,7 @@ const schema = z.object({
 	isAnonymous: z.boolean(),
 	body: z
 		.string()
-		.min(1, "Comment is required")
+		.min(10, "Comment must be at least 10 characters")
 		.max(2000, "Comment is too long"),
 	postId: z.string().uuid(),
 	slug: z.string().min(1),
