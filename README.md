@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Full-Stack Blog
+
+A full-stack blog built with Next.js, Drizzle ORM, and Neon PostgreSQL.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Database:** Neon PostgreSQL (serverless)
+- **ORM:** Drizzle ORM
+- **Validation:** Zod
+- **Styling:** Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the project root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+DATABASE_URL=your_neon_postgres_connection_string
+```
+
+You can find your connection string in the [Neon Console](https://console.neon.tech) under your project's **Connection Details**.
+
+### 3. Run database migrations
+
+```bash
+pnpm db:migrate
+```
+
+### 4. Seed the database
+
+Populate the database with initial blog posts and sample comments:
+
+```bash
+pnpm db:seed
+```
+
+This inserts **7 blog posts** and **4 sample comments** into the live Neon PostgreSQL database. The seed script is idempotent-safe to re-run on a fresh database, but running it against an already-seeded database will insert duplicate rows — reset the tables first if needed.
+
+### 5. Start the development server
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+---
+
+## Database Scripts
+
+| Command | Description |
+|---|---|
+| `pnpm db:generate` | Generate a new Drizzle migration from schema changes |
+| `pnpm db:migrate` | Apply pending migrations to the database |
+| `pnpm db:seed` | Seed the database with initial blog posts and comments |
+| `pnpm db:studio` | Open Drizzle Studio to browse the database visually |
+
+---
+
+## Seed Data
+
+The seed script (`lib/db/seed.ts`) inserts the following content:
+
+**Posts (7 total):**
+- Building My First Full-Stack Blog with Next.js and Drizzle
+- Why I Only Trust a Moka Pot Before 9 AM
+- The Case for Reheated Pizza Over Fresh
+- My Slow Descent into Matcha Obsession
+- Three Months of Learning Spanish and What Actually Stuck
+- Why My Houseplants Keep Surviving Despite My Neglect
+- The Snack I Judge People For Not Liking
+
+**Sample comments** are also seeded against several posts for development and UI testing purposes.
+
+To re-seed a fresh database:
+
+```bash
+pnpm db:migrate  # ensure schema is up to date
+pnpm db:seed
+```
+
+---
+
+## Project Structure
+
+```
+app/
+  blog/
+    page.tsx           # Blog listing page
+    [slug]/
+      page.tsx         # Individual post page
+      actions.ts       # addComment Server Action
+      comment-form.tsx # Comment form (Client Component)
+components/
+  Header.tsx
+  Footer.tsx
+lib/
+  db/
+    index.ts           # Drizzle client
+    schema.ts          # posts + comments tables
+    seed.ts            # Seed script
+drizzle/               # Migration files
+```
+
+---
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Drizzle ORM Documentation](https://orm.drizzle.team)
+- [Neon Documentation](https://neon.tech/docs)

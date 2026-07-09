@@ -54,8 +54,8 @@ export function CommentForm({
 				'input[name="saveInfo"]',
 			) as HTMLInputElement;
 
-			if (saveCheckbox?.checked) {
-				const formData = new FormData(formRef.current!);
+			if (saveCheckbox?.checked && formRef.current) {
+				const formData = new FormData(formRef.current);
 				localStorage.setItem(
 					"comment_name",
 					formData.get("authorName") as string,
@@ -76,7 +76,7 @@ export function CommentForm({
 	}, [state.success]);
 
 	const inputClasses =
-		"w-full rounded-lg border border-slate-300 dark:border-slate-500 bg-transparent px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 [color-scheme:light_dark]";
+		"w-full rounded-lg border border-slate-300 dark:border-slate-500 bg-transparent px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 scheme-light-dark";
 
 	return (
 		<div className="mt-12 bg-transparent">
@@ -97,7 +97,7 @@ export function CommentForm({
 							checked={isAnonymous}
 							onChange={(e) => setIsAnonymous(e.target.checked)}
 						/>
-						<div className="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-slate-400 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#3b82f6]"></div>
+						<div className="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 dark:after:border-slate-400 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#3b82f6]"></div>
 					</div>
 				</label>
 			</div>
@@ -218,7 +218,7 @@ export function CommentForm({
 						defaultChecked={
 							!!(savedInfo.name || savedInfo.email || savedInfo.website)
 						}
-						className="w-4 h-4 rounded border-slate-300 dark:border-slate-500 bg-transparent text-blue-600 focus:ring-blue-500 [color-scheme:light_dark]"
+						className="w-4 h-4 rounded border-slate-300 dark:border-slate-500 bg-transparent text-blue-600 focus:ring-blue-500 scheme-light-dark"
 					/>
 					<label
 						htmlFor="saveInfo"
