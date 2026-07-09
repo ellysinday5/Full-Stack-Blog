@@ -15,7 +15,7 @@ export default async function PostPage({ params }: PageProps) {
     where: eq(posts.slug, slug),
     with: {
       comments: {
-        orderBy: (comments, { desc }) => [desc(comments.createdAt)],
+        orderBy: (comments, { asc }) => [asc(comments.createdAt)],
       },
     },
   });
