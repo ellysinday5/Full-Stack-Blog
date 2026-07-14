@@ -1,137 +1,46 @@
 export default function Loading() {
 	return (
-		<main className="min-h-screen bg-muted py-8">
-			<div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-				<div className="flex gap-8">
-					{/* ─── Main skeleton ─────────────────────────────────────────── */}
-					<section className="min-w-0 flex-1">
-						{/* Featured 2-col */}
-						<div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-							{(["f1", "f2"] as const).map((id) => (
-								<div
-									key={id}
-									className="bg-card border border-border/50 rounded shadow-sm overflow-hidden"
-								>
-									<div className="px-4 pt-4">
-										<div className="h-4 w-16 animate-pulse rounded-sm bg-primary/40" />
-										<div className="mt-2 space-y-1.5">
-											<div className="h-5 w-full animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-5 w-3/4 animate-pulse rounded bg-muted-foreground/30" />
-										</div>
-									</div>
-									<div className="mt-3 h-52 w-full animate-pulse bg-muted-foreground/20" />
-									<div className="px-4 pb-4 pt-3">
-										<div className="space-y-2">
-											<div className="h-3.5 w-full animate-pulse rounded bg-muted-foreground/20" />
-											<div className="h-3.5 w-full animate-pulse rounded bg-muted-foreground/20" />
-											<div className="h-3.5 w-2/3 animate-pulse rounded bg-muted-foreground/20" />
-										</div>
-										<div className="mt-3 flex items-center gap-2">
-											<div className="h-3 w-14 animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-3 w-2 rounded bg-muted-foreground/30" />
-											<div className="h-3 w-24 animate-pulse rounded bg-muted-foreground/30" />
-										</div>
-									</div>
+		<main className="min-h-screen bg-[linear-gradient(135deg,#f7fdf9_0%,#eef8f1_100%)] pb-16 pt-32 sm:pt-36">
+			<div className="mx-auto max-w-7xl px-6">
+				{/* Header skeleton */}
+				<div className="mb-8">
+					<div className="mb-6 h-10 w-48 rounded-lg bg-[#0f3d2e]/10" />
+					<div className="mb-4 h-6 w-32 rounded bg-[#0f3d2e]/10" />
+					{/* Topic pills */}
+					<div className="mb-6 flex flex-wrap gap-3">
+						{(["t1", "t2", "t3"] as const).map((id) => (
+							<div
+								key={id}
+								className="h-9 w-20 rounded-full border border-[#0f3d2e]/20 bg-[#0f3d2e]/8"
+							/>
+						))}
+					</div>
+					{/* Search bar */}
+					<div className="mb-8 flex gap-2">
+						<div className="h-9 w-64 rounded-lg border border-[#0f3d2e]/20 bg-white" />
+						<div className="h-9 w-20 rounded-lg border border-[#0f3d2e]/20 bg-white" />
+					</div>
+				</div>
+
+				{/* Post grid skeleton */}
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{(["c1", "c2", "c3", "c4", "c5", "c6"] as const).map((id) => (
+						<div
+							key={id}
+							className="overflow-hidden rounded-2xl border-2 border-[#0f3d2e]/20 bg-white"
+						>
+							<div className="h-48 w-full bg-[#0f3d2e]/8" />
+							<div className="p-6 space-y-3">
+								<div className="h-5 w-3/4 rounded bg-[#0f3d2e]/10" />
+								<div className="space-y-2">
+									<div className="h-3.5 w-full rounded bg-[#0f3d2e]/8" />
+									<div className="h-3.5 w-5/6 rounded bg-[#0f3d2e]/8" />
+									<div className="h-3.5 w-2/3 rounded bg-[#0f3d2e]/8" />
 								</div>
-							))}
-						</div>
-
-						{/* Regular 3-col */}
-						<div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-							{(["r1", "r2", "r3"] as const).map((id) => (
-								<div
-									key={id}
-									className="bg-card border border-border/50 rounded shadow-sm overflow-hidden"
-								>
-									<div className="px-4 pt-4">
-										<div className="h-4 w-14 animate-pulse rounded-sm bg-primary/40" />
-										<div className="mt-2 space-y-1.5">
-											<div className="h-4 w-full animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-4 w-3/4 animate-pulse rounded bg-muted-foreground/30" />
-										</div>
-									</div>
-									<div className="mt-3 h-44 w-full animate-pulse bg-muted-foreground/20" />
-									<div className="px-4 pb-4 pt-3">
-										<div className="space-y-2">
-											<div className="h-3 w-full animate-pulse rounded bg-muted-foreground/20" />
-											<div className="h-3 w-full animate-pulse rounded bg-muted-foreground/20" />
-											<div className="h-3 w-2/3 animate-pulse rounded bg-muted-foreground/20" />
-										</div>
-										<div className="mt-3 flex items-center gap-2">
-											<div className="h-2.5 w-12 animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-2.5 w-2 rounded bg-muted-foreground/30" />
-											<div className="h-2.5 w-20 animate-pulse rounded bg-muted-foreground/30" />
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-
-						{/* Pagination */}
-						<div className="flex items-center gap-1 mt-2">
-							<div className="h-9 w-9 animate-pulse rounded bg-primary/60" />
-							<div className="h-9 w-9 animate-pulse rounded bg-card border border-border" />
-							<div className="h-9 w-20 animate-pulse rounded bg-card border border-border" />
-						</div>
-					</section>
-
-					{/* ─── Sidebar skeleton ──────────────────────────────────────── */}
-					<aside className="hidden w-[280px] shrink-0 space-y-8 lg:block">
-						{/* Search */}
-						<div>
-							<div className="mb-4 border-b border-border pb-2">
-								<div className="h-3.5 w-24 animate-pulse rounded bg-muted-foreground/30" />
-							</div>
-							<div className="h-10 w-full animate-pulse rounded border border-border bg-card" />
-						</div>
-
-						{/* Posts */}
-						<div>
-							<div className="mb-4 border-b border-border pb-2">
-								<div className="h-3.5 w-16 animate-pulse rounded bg-muted-foreground/30" />
-							</div>
-							<div className="space-y-4">
-								{(["p1", "p2", "p3", "p4", "p5"] as const).map((id) => (
-									<div key={id} className="flex gap-3">
-										<div className="h-16 w-16 shrink-0 animate-pulse rounded bg-muted-foreground/20" />
-										<div className="flex-1 space-y-2 py-1">
-											<div className="h-3.5 w-full animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-3.5 w-3/4 animate-pulse rounded bg-muted-foreground/30" />
-											<div className="h-3 w-1/2 animate-pulse rounded bg-muted-foreground/20" />
-										</div>
-									</div>
-								))}
+								<div className="h-4 w-14 rounded bg-[#0f3d2e]/10" />
 							</div>
 						</div>
-
-						{/* Categories */}
-						<div>
-							<div className="mb-4 border-b border-border pb-2">
-								<div className="h-3.5 w-24 animate-pulse rounded bg-muted-foreground/30" />
-							</div>
-							<div className="space-y-2.5">
-								{([68, 52, 76, 60, 44] as const).map((w) => (
-									<div
-										key={w}
-										className="h-4 animate-pulse rounded bg-muted-foreground/20"
-										style={{ width: `${w}%` }}
-									/>
-								))}
-							</div>
-						</div>
-
-						{/* Quote block */}
-						<div className="animate-pulse rounded bg-primary/20 px-6 py-8">
-							<div className="mb-3 h-8 w-8 rounded bg-primary/40" />
-							<div className="space-y-2">
-								<div className="h-3.5 w-full rounded bg-primary/40" />
-								<div className="h-3.5 w-full rounded bg-primary/40" />
-								<div className="h-3.5 w-3/4 rounded bg-primary/40" />
-								<div className="h-3.5 w-4/5 rounded bg-primary/40" />
-							</div>
-							<div className="mt-4 h-3 w-1/3 rounded bg-primary/40" />
-						</div>
-					</aside>
+					))}
 				</div>
 			</div>
 		</main>

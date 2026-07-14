@@ -29,6 +29,27 @@
 			"when": 1783650000000,
 			"tag": "0003_add_approved_to_comments",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1783700000000,
+			"tag": "0004_add_status_to_posts",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1783793110523,
+			"tag": "0005_faulty_zaran",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1783794921354,
+			"tag": "0006_remarkable_havok",
+			"breakpoints": true
 		}
 	]
 }
