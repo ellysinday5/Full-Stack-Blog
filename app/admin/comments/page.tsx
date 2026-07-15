@@ -2,6 +2,9 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { categories, comments, posts } from "@/lib/db/schema";
 import { CommentsTable } from "./comments-table";
+import { getSetting } from "@/lib/db/settings";
+import { AutoApproveToggle } from "./auto-approve-toggle";
+import { connection } from "next/server";
 
 // export const dynamic = "force-dynamic";
 
@@ -10,6 +13,9 @@ export const metadata = {
 };
 
 export default async function AdminCommentsPage() {
+	await connection();
+	const autoApprove = (await getSetting("auto_approve_comments", "false")) === "true";
+
 	const allComments = await db
 		.select({
 			id: comments.id,
@@ -36,9 +42,12 @@ export default async function AdminCommentsPage() {
 
 	return (
 		<div className="w-full">
-			<h1 className="text-2xl font-bold text-[#1a2e1a] mb-6">
-				Manage Comments
-			</h1>
+			<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+				<h1 className="text-2xl font-bold text-[#1a2e1a]">
+					Manage Comments
+				</h1>
+				<AutoApproveToggle initialEnabled={autoApprove} />
+			</div>
 			<CommentsTable comments={serialized} />
 		</div>
 	);

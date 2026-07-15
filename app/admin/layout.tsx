@@ -116,7 +116,7 @@ function AdminShell({ children }: { children: ReactNode }) {
 
 	// Login page renders standalone — no sidebar/navbar
 	if (pathname === "/admin/login") {
-		return <>{children}</>;
+		return <Suspense fallback={null}>{children}</Suspense>;
 	}
 
 	const isActive = (href: string, exact: boolean) =>

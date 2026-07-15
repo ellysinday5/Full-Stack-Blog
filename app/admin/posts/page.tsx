@@ -2,11 +2,13 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 import { ManagePostsTable } from "./manage-posts-table";
+import { connection } from "next/server";
 
 // export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin | Manage Posts" };
 
 export default async function ManagePostsPage() {
+	await connection();
 	const allPosts = await db
 		.select({
 			id: posts.id,

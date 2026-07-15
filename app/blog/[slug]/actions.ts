@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { comments } from "@/lib/db/schema";
+import { getSetting } from "@/lib/db/settings";
 
 const schema = z.object({
 	authorName: z.string().min(1, "Name is required").max(80, "Name is too long"),
@@ -20,6 +21,7 @@ const schema = z.object({
 
 type FormState = {
 	success?: boolean;
+	approved?: boolean;
 	errors?: {
 		authorName?: string;
 		email?: string;
@@ -57,6 +59,8 @@ export async function addComment(
 	const { authorName, email, website, isAnonymous, body, postId, slug } =
 		parsed.data;
 
+	const autoApprove = (await getSetting("auto_approve_comments", "false")) === "true";
+
 	await db.insert(comments).values({
 		authorName,
 		email,
@@ -64,9 +68,10 @@ export async function addComment(
 		isAnonymous,
 		body,
 		postId,
+		approved: autoApprove,
 	});
 
 	revalidatePath(`/blog/${slug}`);
 
-	return { success: true };
+	return { success: true, approved: autoApprove };
 }

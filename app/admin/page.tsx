@@ -2,6 +2,7 @@ import { asc, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 import { AdminDashboard } from "./admin-dashboard";
+import { connection } from "next/server";
 
 // export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ export const metadata = {
 };
 
 export default async function AdminPage() {
+	await connection();
 	const [allPosts, allCategories] = await Promise.all([
 		db
 			.select({
