@@ -1,0 +1,203 @@
+"use server";
+
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { db } from "@/lib/db";
+import { categories, posts } from "@/lib/db/schema";
+
+// ── Create Post ───────────────────────────────────────────────────────────────
+
+const createSchema = z.object({
+	title: z.string().min(1, "Title is required").max(200, "Title is too long"),
+	slug: z
+		.string()
+		.min(1, "Slug is required")
+		.max(200, "Slug is too long")
+		.regex(
+			/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+			"Slug must be lowercase letters, numbers, and hyphens only",
+		),
+	body: z.string().min(1, "Content is required"),
+	tags: z.string().optional(),
+	categoryId: z.string().optional(),
+	status: z.enum(["published", "draft"]).default("published"),
+});
+
+export type CreatePostState = {
+	errors?: {
+		title?: string;
+		slug?: string;
+		body?: string;
+		tags?: string;
+		categoryId?: string;
+	};
+};
+
+export async function createPost(
+	_prevState: CreatePostState,
+	formData: FormData,
+): Promise<CreatePostState> {
+	const parsed = createSchema.safeParse({
+		title: formData.get("title"),
+		slug: formData.get("slug"),
+		body: formData.get("body"),
+		tags: formData.get("tags") || "",
+		categoryId: formData.get("categoryId") || undefined,
+		status: formData.get("status") || "published",
+	});
+
+	if (!parsed.success) {
+		const fieldErrors = parsed.error.flatten().fieldErrors;
+		return {
+			errors: {
+				title: fieldErrors.title?.[0],
+				slug: fieldErrors.slug?.[0],
+				body: fieldErrors.body?.[0],
+				tags: fieldErrors.tags?.[0],
+			},
+		};
+	}
+
+	const { title, slug, body, tags, categoryId, status } = parsed.data;
+
+	const tagsArray = tags
+		? tags
+				.split(",")
+				.map((t) => t.trim())
+				.filter(Boolean)
+		: [];
+
+	await db.insert(posts).values({
+		title,
+		slug,
+		body,
+		tags: tagsArray,
+		status,
+		categoryId: categoryId || null,
+	});
+
+	revalidatePath("/blog");
+	revalidatePath(`/blog/${slug}`);
+	revalidatePath("/admin");
+	revalidatePath("/admin/posts");
+
+	if (status === "published") {
+		redirect("/admin/posts");
+	}
+	redirect("/admin");
+}
+
+// ── Post Status ───────────────────────────────────────────────────────────────
+
+export type PostStatus = "published" | "draft" | "archived";
+
+export type UpdatePostStatusState = {
+	success?: boolean;
+	error?: string;
+};
+
+export async function updatePostStatus(
+	_prevState: UpdatePostStatusState,
+	formData: FormData,
+): Promise<UpdatePostStatusState> {
+	const postId = formData.get("postId") as string;
+	const status = formData.get("status") as PostStatus;
+
+	if (!postId || !["published", "draft", "archived"].includes(status)) {
+		return { error: "Invalid request." };
+	}
+
+	await db.update(posts).set({ status }).where(eq(posts.id, postId));
+
+	revalidatePath("/blog");
+	revalidatePath("/admin");
+	revalidatePath("/admin/posts");
+
+	return { success: true };
+}
+
+// ── Delete Post ───────────────────────────────────────────────────────────────
+
+export type DeletePostState = { success?: boolean; error?: string };
+
+export async function deletePost(
+	_prevState: DeletePostState,
+	formData: FormData,
+): Promise<DeletePostState> {
+	const postId = formData.get("postId") as string;
+	if (!postId) return { error: "Missing post ID." };
+
+	await db.delete(posts).where(eq(posts.id, postId));
+
+	revalidatePath("/blog");
+	revalidatePath("/admin");
+	revalidatePath("/admin/posts");
+
+	return { success: true };
+}
+
+// ── Categories ────────────────────────────────────────────────────────────────
+
+const categorySchema = z.object({
+	name: z.string().min(1, "Name is required").max(100),
+	slug: z
+		.string()
+		.min(1, "Slug is required")
+		.max(100)
+		.regex(
+			/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+			"Slug must be lowercase, numbers, hyphens only",
+		),
+	description: z.string().optional(),
+});
+
+export type CategoryState = {
+	success?: boolean;
+	errors?: { name?: string; slug?: string; description?: string };
+};
+
+export async function createCategory(
+	_prevState: CategoryState,
+	formData: FormData,
+): Promise<CategoryState> {
+	const parsed = categorySchema.safeParse({
+		name: formData.get("name"),
+		slug: formData.get("slug"),
+		description: formData.get("description") || undefined,
+	});
+
+	if (!parsed.success) {
+		const fe = parsed.error.flatten().fieldErrors;
+		return {
+			errors: {
+				name: fe.name?.[0],
+				slug: fe.slug?.[0],
+				description: fe.description?.[0],
+			},
+		};
+	}
+
+	try {
+		await db.insert(categories).values(parsed.data);
+	} catch {
+		return {
+			errors: { name: "A category with this name or slug already exists." },
+		};
+	}
+
+	revalidatePath("/admin/categories");
+	return { success: true };
+}
+
+export async function deleteCategory(
+	_prevState: { success?: boolean; error?: string },
+	formData: FormData,
+): Promise<{ success?: boolean; error?: string }> {
+	const id = formData.get("id") as string;
+	if (!id) return { error: "Missing ID." };
+	await db.delete(categories).where(eq(categories.id, id));
+	revalidatePath("/admin/categories");
+	return { success: true };
+}
