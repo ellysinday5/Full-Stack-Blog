@@ -1,1 +1,0 @@
-ALTER TABLE "posts" ADD COLUMN "status" text DEFAULT 'published' NOT NULL;
