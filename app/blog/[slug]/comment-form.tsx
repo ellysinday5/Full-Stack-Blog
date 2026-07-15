@@ -12,6 +12,7 @@ function SubmitButton() {
 			disabled={pending}
 			className="rounded-lg bg-[#1f6f4d] px-8 py-3 text-sm font-bold tracking-wide text-white shadow-md shadow-[#1f6f4d]/20
 			           transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#175a3d] hover:shadow-lg disabled:opacity-50 disabled:hover:translate-y-0"
+			suppressHydrationWarning
 		>
 			{pending ? "Posting…" : "Post Comment"}
 		</button>
@@ -121,6 +122,7 @@ export function CommentForm({
 								className={inputClasses}
 								placeholder="Your name"
 								required
+								suppressHydrationWarning
 							/>
 							{state.errors?.authorName && (
 								<p className="mt-2 text-xs font-semibold text-red-500">
@@ -141,6 +143,7 @@ export function CommentForm({
 								className={inputClasses}
 								placeholder="you@example.com"
 								required
+								suppressHydrationWarning
 							/>
 							{state.errors?.email && (
 								<p className="mt-2 text-xs font-semibold text-red-500">
@@ -160,6 +163,7 @@ export function CommentForm({
 								defaultValue={savedInfo.website}
 								className={inputClasses}
 								placeholder="https://yoursite.com"
+								suppressHydrationWarning
 							/>
 							{state.errors?.website && (
 								<p className="mt-2 text-xs font-semibold text-red-500">
