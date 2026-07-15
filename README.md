@@ -112,6 +112,14 @@ drizzle/               # Migration files
 
 ---
 
+## Database Migrations & Rollbacks
+
+Drizzle ORM does not have a direct "down" or rollback command for migrations. To revert a migration, follow this workflow:
+
+1. **Update the Schema**: Remove or clear the changes that need to be reverted from `lib/db/schema.ts`. For example, if a migration created a table, remove that table from the schema.
+2. **Generate a New Migration**: Run `pnpm db:generate`. Drizzle Kit will detect the removed table and generate a new SQL migration file containing the corresponding `DROP TABLE` command.
+3. **Apply the Migration**: Run `pnpm db:migrate` to apply the newly generated migration to your database, effectively rolling back the changes.
+
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)

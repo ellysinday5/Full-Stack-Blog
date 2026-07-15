@@ -1,57 +1,68 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 :root {
-	/* Light mode palette */
-	--background: #f5f6f7;
-	--foreground: #1c1917;
+	/* Emerald and dark green theme for the blog */
+	--background: #f7fdf9;
+	--foreground: #0f3d2e;
 	--card: #ffffff;
-	--card-foreground: #1c1917;
-	--border: #e5e7eb;
-	--muted: #f3f4f6;
-	--muted-foreground: #6b7280;
-	--primary: #2563eb;
+	--card-foreground: #0f3d2e;
+	--border: #dcefe3;
+	--muted: #eff8f2;
+	--muted-foreground: #4c6f5e;
+	--primary: #1f6f4d;
 	--primary-foreground: #ffffff;
-	--accent: #dbeafe;
-	--header-top: #1f2937;
-	--header-top-text: #e5e7eb;
-}
-
-.dark {
-	/* Dark mode palette */
-	--background: #09090b;
-	--foreground: #f8fafc;
-	--card: #18181b;
-	--card-foreground: #f8fafc;
-	--border: #27272a;
-	--muted: #27272a;
-	--muted-foreground: #a1a1aa;
-	--primary: #3b82f6;
-	--primary-foreground: #ffffff;
-	--accent: #1e3a8a;
-	--header-top: #000000;
-	--header-top-text: #a1a1aa;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-border: var(--border);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-accent: var(--accent);
-  --color-header-top: var(--header-top);
-  --color-header-top-text: var(--header-top-text);
-  
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--accent: #dff7e9;
+	--accent-foreground: #0f3d2e;
+	--popover: #ffffff;
+	--popover-foreground: #0f3d2e;
+	--secondary: #eff8f2;
+	--secondary-foreground: #0f3d2e;
+	--destructive: oklch(0.577 0.245 27.325);
+	--destructive-foreground: oklch(0.577 0.245 27.325);
+	--input: #e4f2e9;
+	--ring: #1f6f4d;
+	--chart-1: #2f8a5a;
+	--chart-2: #0f3d2e;
+	--chart-3: #14553a;
+	--chart-4: #4d8f6d;
+	--chart-5: #7bc79d;
+	--radius: 0.625rem;
+	--sidebar: #f4fbf6;
+	--sidebar-foreground: #0f3d2e;
+	--sidebar-primary: #1f6f4d;
+	--sidebar-primary-foreground: #f4fbf6;
+	--sidebar-accent: #dff7e9;
+	--sidebar-accent-foreground: #0f3d2e;
+	--sidebar-border: #dcefe3;
+	--sidebar-ring: #1f6f4d;
 }
 
 body {
-	background: var(--background);
+	font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Serif utility — uses Lora loaded in root layout */
+.font-serif {
+	font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
+* {
+	border-color: var(--border);
+	outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+body {
+	background-color: var(--background);
 	color: var(--foreground);
-	font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+	font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Remove default underline on links; opt back in per-component where wanted */
+a {
+	text-decoration: none;
 }

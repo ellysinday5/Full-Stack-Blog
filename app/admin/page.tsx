@@ -1,31 +1,40 @@
-import Link from "next/link";
-import { PostForm } from "./post-form";
+import { asc, desc } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { categories, posts } from "@/lib/db/schema";
+import { AdminDashboard } from "./admin-dashboard";
+
+// export const dynamic = "force-dynamic";
 
 export const metadata = {
-	title: "Admin | Create Post",
+	title: "Admin | Write Post",
 	description: "Create a new blog post",
 };
 
-export default function AdminPage() {
-	return (
-		<main className="min-h-screen bg-muted py-12">
-			<div className="mx-auto max-w-3xl px-6">
-				<div className="mb-6 flex items-center justify-between">
-					<h1 className="text-2xl font-bold text-foreground">Admin</h1>
-					<Link
-						href="/admin/comments"
-						className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-card-foreground hover:bg-muted transition-colors"
-					>
-						Moderate Comments →
-					</Link>
-				</div>
-				<div className="rounded-lg border border-border bg-card p-8 shadow-sm">
-					<h2 className="mb-6 text-xl font-bold text-card-foreground">
-						Create New Post
-					</h2>
-					<PostForm />
-				</div>
-			</div>
-		</main>
-	);
+export default async function AdminPage() {
+	const [allPosts, allCategories] = await Promise.all([
+		db
+			.select({
+				id: posts.id,
+				title: posts.title,
+				slug: posts.slug,
+				status: posts.status,
+				body: posts.body,
+				createdAt: posts.createdAt,
+			})
+			.from(posts)
+			.orderBy(desc(posts.createdAt))
+			.catch(() => []),
+		db
+			.select({ id: categories.id, name: categories.name })
+			.from(categories)
+			.orderBy(asc(categories.name))
+			.catch(() => []),
+	]);
+
+	const serializedPosts = allPosts.map((p) => ({
+		...p,
+		createdAt: p.createdAt.toISOString(),
+	}));
+
+	return <AdminDashboard posts={serializedPosts} categories={allCategories} />;
 }
