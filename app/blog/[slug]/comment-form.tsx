@@ -215,7 +215,9 @@ export function CommentForm({
 							✓
 						</div>
 						<p className="text-sm text-[#0f3d2e] font-semibold">
-							Comment posted — it will appear once approved.
+							{state.approved
+								? "Comment posted successfully!"
+								: "Comment submitted — it will appear once approved by the administrator."}
 						</p>
 					</div>
 				)}

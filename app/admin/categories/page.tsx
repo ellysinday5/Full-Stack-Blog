@@ -3,11 +3,13 @@ import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 import { CategoryForm } from "./category-form";
 import { CategoryList } from "./category-list";
+import { connection } from "next/server";
 
 // export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin | Categories" };
 
 export default async function CategoriesPage() {
+	await connection();
 	let rows: Array<{
 		id: string;
 		name: string;

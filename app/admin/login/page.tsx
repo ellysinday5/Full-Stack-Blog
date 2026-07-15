@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LoginForm } from "./login-form";
+import { connection } from "next/server";
 
 export const metadata = {
 	title: "Admin Login | Elly's Blog",
@@ -10,6 +11,7 @@ export default async function AdminLoginPage({
 }: {
 	searchParams: Promise<{ from?: string }>;
 }) {
+	await connection();
 	const { from = "/admin" } = await searchParams;
 
 	return (

@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { comments } from "@/lib/db/schema";
+import { setSetting } from "@/lib/db/settings";
 
 export type ModerationState = {
 	success?: boolean;
@@ -87,3 +88,30 @@ export async function deleteComment(
 
 	return { success: true };
 }
+
+const toggleAutoApproveSchema = z.object({
+	enabled: z.string(),
+});
+
+export async function toggleAutoApprove(
+	_prevState: ModerationState,
+	formData: FormData,
+): Promise<ModerationState> {
+	const authErr = await requireAdmin();
+	if (authErr) return authErr;
+
+	const parsed = toggleAutoApproveSchema.safeParse({
+		enabled: formData.get("enabled"),
+	});
+
+	if (!parsed.success) {
+		return { error: "Invalid input" };
+	}
+
+	const { enabled } = parsed.data;
+	await setSetting("auto_approve_comments", enabled);
+
+	revalidatePath("/admin/comments");
+	return { success: true };
+}
+
