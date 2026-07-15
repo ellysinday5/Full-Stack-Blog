@@ -1,6 +1,5 @@
-import { LoginForm } from "./login-form";
-import Image from "next/image";
 import Link from "next/link";
+import { LoginForm } from "./login-form";
 
 export const metadata = {
 	title: "Admin Login | Elly's Blog",
@@ -15,21 +14,9 @@ export default async function AdminLoginPage({
 
 	return (
 		<main
-			className="relative min-h-screen flex flex-col items-center justify-center px-4"
+			className="relative flex-1 flex flex-col items-center justify-center px-4 w-full min-h-screen"
 			style={{ background: "#0f2d1a" }}
 		>
-			{/* Logo */}
-			<Link href="/" className="mb-8 select-none" aria-label="Back to home">
-				<Image
-					src="/images/logo.png"
-					alt="Elly's Blog"
-					width={180}
-					height={80}
-					className="h-auto w-auto"
-					priority
-				/>
-			</Link>
-
 			{/* Card */}
 			<div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1a3d24] px-8 py-8 shadow-2xl">
 				<div className="mb-6 text-center">

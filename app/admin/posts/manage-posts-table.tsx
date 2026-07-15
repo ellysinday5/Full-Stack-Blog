@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
-import { ConfirmModal } from "@/components/admin/Modal";
 import { useToast } from "@/components/admin/Toast";
-import { type PostStatus, deletePost, updatePostStatus } from "../actions";
+import { ConfirmModal } from "@/components/Modal";
+import { deletePost, type PostStatus, updatePostStatus } from "../actions";
 
 type PostRow = {
 	id: string;
@@ -215,6 +215,7 @@ export function ManagePostsTable({ posts }: { posts: PostRow[] }) {
 
 	return (
 		// biome-ignore lint/a11y/useKeyWithClickEvents: closes dropdowns on outside click
+		// biome-ignore lint/a11y/noStaticElementInteractions: closes dropdowns on outside click
 		<div onClick={closeDropdowns}>
 			{/* Toolbar */}
 			<div className="flex items-center gap-3 flex-wrap mb-6">
@@ -278,7 +279,7 @@ export function ManagePostsTable({ posts }: { posts: PostRow[] }) {
 							setFilterOpen((v) => !v);
 							setSortOpen(false);
 						}}
-						className={`flex items-center gap-2 rounded-full border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#1a2e1a]/5 ${categoryFilter !== "all" ? "font-semibold" : ""}`}
+						className={`flex items-center gap-2 rounded-lg border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#eef8f1] hover:text-[#1a2e1a] ${categoryFilter !== "all" ? "font-semibold" : ""}`}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -298,6 +299,8 @@ export function ManagePostsTable({ posts }: { posts: PostRow[] }) {
 						{categoryFilter !== "all" ? categoryFilter : "Filter"}
 					</button>
 					{filterOpen && (
+						// biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation
+						// biome-ignore lint/a11y/noStaticElementInteractions: stop propagation
 						<div
 							className="absolute z-20 mt-2 w-44 rounded-lg border border-[#1a2e1a]/30 bg-white p-1 shadow-lg"
 							onClick={(e) => e.stopPropagation()}
@@ -338,7 +341,7 @@ export function ManagePostsTable({ posts }: { posts: PostRow[] }) {
 							setSortOpen((v) => !v);
 							setFilterOpen(false);
 						}}
-						className="flex items-center gap-2 rounded-full border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#1a2e1a]/5"
+						className="flex items-center gap-2 rounded-lg border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#eef8f1] hover:text-[#1a2e1a]"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -358,6 +361,8 @@ export function ManagePostsTable({ posts }: { posts: PostRow[] }) {
 						Sort
 					</button>
 					{sortOpen && (
+						// biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation
+						// biome-ignore lint/a11y/noStaticElementInteractions: stop propagation
 						<div
 							className="absolute z-20 mt-2 w-40 rounded-lg border border-[#1a2e1a]/30 bg-white p-1 shadow-lg"
 							onClick={(e) => e.stopPropagation()}

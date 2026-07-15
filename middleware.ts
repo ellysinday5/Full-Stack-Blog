@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 	if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
 		const session = request.cookies.get(ADMIN_SESSION_COOKIE);
 
-		if (!session || session.value !== "authenticated") {
+		if (session?.value !== "authenticated") {
 			const loginUrl = new URL("/admin/login", request.url);
 			// Preserve the original destination so we can redirect back after login
 			loginUrl.searchParams.set("from", pathname);

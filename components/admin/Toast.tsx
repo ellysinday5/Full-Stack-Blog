@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, XCircle, AlertTriangle, Info, X } from "lucide-react";
+import { AlertTriangle, CheckCircle, Info, X, XCircle } from "lucide-react";
 import {
 	createContext,
 	useCallback,

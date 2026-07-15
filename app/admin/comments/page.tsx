@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { categories, comments, posts } from "@/lib/db/schema";
 import { CommentsTable } from "./comments-table";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata = {
 	title: "Admin | Manage Comments",

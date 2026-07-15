@@ -76,6 +76,7 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 
 	return (
 		// biome-ignore lint/a11y/useKeyWithClickEvents: click handler only closes dropdowns
+		// biome-ignore lint/a11y/noStaticElementInteractions: click handler only closes dropdowns
 		<div className="w-full" onClick={handleBodyClick}>
 			{/* Page heading */}
 			<h1 className="text-2xl font-bold text-[#1a2e1a] mb-5">Write a post</h1>
@@ -142,7 +143,7 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 							setFilterOpen((v) => !v);
 							setSortOpen(false);
 						}}
-						className={`flex items-center gap-2 rounded-full border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#1a2e1a]/5 ${statusFilter !== "all" ? "bg-[#1a2e1a]/8 font-semibold" : ""}`}
+						className={`flex items-center gap-2 rounded-lg border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#eef8f1] hover:text-[#1a2e1a] ${statusFilter !== "all" ? "bg-[#eef8f1] font-semibold" : ""}`}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -162,6 +163,8 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 						{statusFilter !== "all" ? activeStatus?.label : "Filter"}
 					</button>
 					{filterOpen && (
+						// biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation
+						// biome-ignore lint/a11y/noStaticElementInteractions: stop propagation
 						<div
 							className="absolute z-20 mt-2 w-40 rounded-lg border border-[#1a2e1a]/30 bg-white p-1 shadow-lg"
 							onClick={(e) => e.stopPropagation()}
@@ -192,7 +195,7 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 							setSortOpen((v) => !v);
 							setFilterOpen(false);
 						}}
-						className="flex items-center gap-2 rounded-full border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#1a2e1a]/5"
+						className="flex items-center gap-2 rounded-lg border border-[#1a2e1a] bg-white px-4 py-2 text-sm font-medium text-[#1a2e1a] hover:bg-[#eef8f1] hover:text-[#1a2e1a]"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -212,6 +215,8 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 						Sort
 					</button>
 					{sortOpen && (
+						// biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation
+						// biome-ignore lint/a11y/noStaticElementInteractions: stop propagation
 						<div
 							className="absolute z-20 mt-2 w-40 rounded-lg border border-[#1a2e1a]/30 bg-white p-1 shadow-lg"
 							onClick={(e) => e.stopPropagation()}

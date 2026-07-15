@@ -1,55 +1,62 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1783497151915,
-			"tag": "0000_illegal_talkback",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1783565550423,
-			"tag": "0001_panoramic_the_santerians",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
-			"when": 1783600000000,
-			"tag": "0002_add_tags_to_posts",
-			"breakpoints": true
-		},
-		{
-			"idx": 3,
-			"version": "7",
-			"when": 1783650000000,
-			"tag": "0003_add_approved_to_comments",
-			"breakpoints": true
-		},
-		{
-			"idx": 4,
-			"version": "7",
-			"when": 1783700000000,
-			"tag": "0004_add_status_to_posts",
-			"breakpoints": true
-		},
-		{
-			"idx": 5,
-			"version": "7",
-			"when": 1783793110523,
-			"tag": "0005_faulty_zaran",
-			"breakpoints": true
-		},
-		{
-			"idx": 6,
-			"version": "7",
-			"when": 1783794921354,
-			"tag": "0006_remarkable_havok",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1783497151915,
+      "tag": "0000_illegal_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783565550423,
+      "tag": "0001_panoramic_the_santerians",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783600000000,
+      "tag": "0002_add_tags_to_posts",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783650000000,
+      "tag": "0003_add_approved_to_comments",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783700000000,
+      "tag": "0004_add_status_to_posts",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783793110523,
+      "tag": "0005_faulty_zaran",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783794921354,
+      "tag": "0006_remarkable_havok",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1784079287101,
+      "tag": "0007_amazing_preak",
+      "breakpoints": true
+    }
+  ]
 }

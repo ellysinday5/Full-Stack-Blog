@@ -53,3 +53,9 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 export const commentsRelations = relations(comments, ({ one }) => ({
 	post: one(posts, { fields: [comments.postId], references: [posts.id] }),
 }));
+
+export const settings = pgTable("settings", {
+	key: text("key").primaryKey(),
+	value: text("value").notNull(),
+});
+

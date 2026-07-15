@@ -1,12 +1,12 @@
 import { asc, desc } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
-import { SearchBar } from "@/components/blog/SearchBar";
+import { SearchBox } from "@/components/blog/SearchBox";
 import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata = {
 	title: "Blog | Elly's Blog",
@@ -104,18 +104,18 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
 	return (
 		<PublicShell>
-			<main className="min-h-screen bg-[linear-gradient(135deg,#f7fdf9_0%,#eef8f1_100%)] pb-16 pt-32 sm:pt-36">
-				<div className="mx-auto max-w-7xl px-6">
+			<main className="min-h-screen bg-[linear-gradient(135deg,#f4f9f5_0%,#eef8f1_100%)] pb-24 pt-32 sm:pt-40">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					{/* Page Header */}
-					<div className="mb-8">
-						<h1 className="text-4xl font-bold text-[#0f3d2e] font-serif leading-tight mb-6">
+					<div className="mb-12">
+						<h1 className="text-4xl sm:text-5xl font-bold text-[#0f3d2e] font-serif leading-tight mb-8">
 							{pageTitle}
 						</h1>
 
 						<div className="mb-4">
-							<h2 className="text-xl font-bold text-[#0f3d2e] mb-4">
+							{/* <h2 className="text-xl font-bold text-[#0f3d2e] mb-4">
 								All Stories
-							</h2>
+							</h2> */}
 
 							{/* Category pills — from DB */}
 							<div className="mb-6 flex flex-wrap items-center gap-3">
@@ -125,35 +125,53 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 										No categories yet
 									</span>
 								) : (
-									categoryNames.map((category) => {
-										const isActive =
-											activeTags.length === 1 &&
-											activeTags[0].toLowerCase() === category.toLowerCase();
-										return (
-											<Link
-												key={category}
-												href={
-													isActive
-														? "/blog"
-														: `/blog?tag=${encodeURIComponent(category)}`
-												}
-												className={`rounded-full px-4 py-2 text-sm font-semibold border transition-colors ${
-													isActive
-														? "bg-[#0f3d2e] text-white border-[#0f3d2e]"
-														: "bg-white text-[#0f3d2e] border-[#0f3d2e] hover:bg-[#0f3d2e] hover:text-white"
-												}`}
-											>
-												{category}
-											</Link>
-										);
-									})
+									<>
+										<Link
+											href="/blog"
+											prefetch={true}
+											className={`rounded-full px-5 py-2 text-sm font-semibold border transition-all duration-300 ${
+												activeTags.length === 0
+													? "bg-[#1f6f4d] text-white border-[#1f6f4d] shadow-md shadow-[#1f6f4d]/20"
+													: "bg-white text-[#4c6f5e] border-[#dcefe3] hover:border-[#1f6f4d] hover:text-[#1f6f4d] hover:shadow-sm"
+											}`}
+										>
+											All
+										</Link>
+										{categoryNames.map((category) => {
+											const isActive =
+												activeTags.length === 1 &&
+												activeTags[0].toLowerCase() === category.toLowerCase();
+											return (
+												<Link
+													key={category}
+													href={
+														isActive
+															? "/blog"
+															: `/blog?tag=${encodeURIComponent(category)}`
+													}
+													prefetch={true}
+													className={`rounded-full px-5 py-2 text-sm font-semibold border transition-all duration-300 ${
+														isActive
+															? "bg-[#1f6f4d] text-white border-[#1f6f4d] shadow-md shadow-[#1f6f4d]/20"
+															: "bg-white text-[#4c6f5e] border-[#dcefe3] hover:border-[#1f6f4d] hover:text-[#1f6f4d] hover:shadow-sm"
+													}`}
+												>
+													{category}
+												</Link>
+											);
+										})}
+									</>
 								)}
 							</div>
 						</div>
 
 						{/* Search + Clear */}
-						<Suspense fallback={<div className="mb-8 h-9" />}>
-							<SearchBar />
+						<Suspense
+							fallback={
+								<div className="mb-8 h-10 w-full max-w-md rounded-lg border border-[#0f3d2e]/20 bg-white" />
+							}
+						>
+							<SearchBox />
 						</Suspense>
 					</div>
 
@@ -192,33 +210,32 @@ function PostCard({ post, index }: { post: PostRow; index: number }) {
 
 	return (
 		<article
-			className="group relative overflow-hidden rounded-2xl border-2 border-[#0f3d2e] bg-white transition-shadow hover:shadow-lg"
+			className="group relative flex flex-col h-full overflow-hidden rounded-2xl border border-[#dcefe3] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-[#1f6f4d]/30"
 			id={`post-card-${post.id}`}
 		>
 			{/* Cover image */}
-			<Link href={`/blog/${post.slug}`} tabIndex={-1} aria-hidden="true">
+			<div className="relative h-56 w-full overflow-hidden bg-[#eef8f1]">
 				{/* biome-ignore lint/performance/noImgElement: placeholder */}
 				<img
 					src={coverImage}
 					alt={post.title}
 					loading={index < 3 ? "eager" : "lazy"}
-					className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+					className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
 				/>
-			</Link>
+				<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+			</div>
 
-			<div className="p-6">
-				<h2 className="font-bold text-lg leading-snug text-[#0f3d2e] mb-3">
-					<Link href={`/blog/${post.slug}`} id={`read-post-${post.id}`}>
+			<div className="flex flex-1 flex-col p-6 sm:p-8">
+				<h2 className="font-serif text-2xl font-bold leading-tight text-[#0f3d2e] mb-4 transition-colors group-hover:text-[#1f6f4d]">
+					<Link href={`/blog/${post.slug}`} id={`read-post-${post.id}`} className="focus:outline-none">
+						<span className="absolute inset-0" aria-hidden="true" />
 						{post.title}
 					</Link>
 				</h2>
-				<p className="text-sm leading-relaxed text-[#4c6f5e] mb-4">{excerpt}</p>
-				<Link
-					href={`/blog/${post.slug}`}
-					className="inline-block font-semibold text-[#0f3d2e] hover:text-[#175a3d]"
-				>
-					View →
-				</Link>
+				<p className="mb-6 flex-1 text-sm leading-relaxed text-[#4c6f5e]">{excerpt}</p>
+				<div className="mt-auto inline-flex items-center text-xs font-bold uppercase tracking-wider text-[#1f6f4d] transition-colors group-hover:text-[#175a3d]">
+					Read Story <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+				</div>
 			</div>
 		</article>
 	);
@@ -227,21 +244,26 @@ function PostCard({ post, index }: { post: PostRow; index: number }) {
 function EmptyState({ tag }: { tag?: string }) {
 	return (
 		<div
-			className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#0f3d2e]/30 bg-white px-6 py-24 text-center"
+			className="mx-auto max-w-lg flex flex-col items-center justify-center rounded-3xl border border-dashed border-[#1f6f4d]/20 bg-white/50 px-8 py-24 text-center shadow-sm backdrop-blur-sm"
 			id="empty-state"
 		>
-			<div className="mb-4 text-4xl">📝</div>
-			<p className="text-lg font-semibold text-[#0f3d2e]">
+			<div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#eef8f1] text-4xl shadow-inner">
+				📝
+			</div>
+			<p className="text-2xl font-bold text-[#0f3d2e] font-serif">
 				{tag ? `No posts tagged "${tag}"` : "No stories yet"}
 			</p>
-			<p className="mt-2 text-sm text-[#4c6f5e]">
+			<p className="mt-4 text-base leading-relaxed text-[#4c6f5e]">
 				{tag ? (
-					<Link
-						href="/blog"
-						className="text-[#0f3d2e] underline underline-offset-2"
-					>
-						View all posts
-					</Link>
+					<>
+						We couldn't find any stories for this topic.{" "}
+						<Link
+							href="/blog"
+							className="font-semibold text-[#1f6f4d] hover:text-[#175a3d] hover:underline underline-offset-4 transition-all"
+						>
+							View all posts
+						</Link>
+					</>
 				) : (
 					"Check back soon for our first entry."
 				)}

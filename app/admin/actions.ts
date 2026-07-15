@@ -84,7 +84,7 @@ export async function createPost(
 	revalidatePath("/admin/posts");
 
 	if (status === "published") {
-		redirect(`/blog/${slug}`);
+		redirect("/admin/posts");
 	}
 	redirect("/admin");
 }

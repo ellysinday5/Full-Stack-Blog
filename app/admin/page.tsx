@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 import { AdminDashboard } from "./admin-dashboard";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata = {
 	title: "Admin | Write Post",

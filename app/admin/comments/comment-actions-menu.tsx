@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { ConfirmModal, Modal } from "@/components/admin/Modal";
 import { useToast } from "@/components/admin/Toast";
+import { ConfirmModal, Modal } from "@/components/Modal";
 import { deleteComment, moderateComment } from "../moderation-actions";
 
 interface Props {

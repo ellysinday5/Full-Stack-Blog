@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
 import { comments, posts } from "@/lib/db/schema";
 import { CommentsSection } from "./comments-section";
@@ -38,11 +39,11 @@ function getTagStyle(tag: string): string {
 		hash = (hash * 31 + tag.charCodeAt(i)) % 5;
 	}
 	const styles = [
-		"bg-green-800/50 text-green-300 border border-green-700/40",
-		"bg-emerald-800/50 text-emerald-300 border border-emerald-700/40",
-		"bg-lime-800/50 text-lime-300 border border-lime-700/40",
-		"bg-teal-800/50 text-teal-300 border border-teal-700/40",
-		"bg-stone-700/50 text-stone-300 border border-stone-600/40",
+		"bg-[#1f6f4d]/10 text-[#1f6f4d] border border-[#1f6f4d]/20",
+		"bg-[#0f3d2e]/10 text-[#0f3d2e] border border-[#0f3d2e]/20",
+		"bg-[#4c6f5e]/10 text-[#4c6f5e] border border-[#4c6f5e]/20",
+		"bg-[#7bc79d]/10 text-[#7bc79d] border border-[#7bc79d]/20",
+		"bg-[#133d2e]/10 text-[#133d2e] border border-[#133d2e]/20",
 	];
 	return styles[hash];
 }
@@ -86,80 +87,86 @@ export default async function PostPage({ params }: PageProps) {
 	}));
 
 	return (
-		<main className="min-h-screen bg-[#0d1a0d] pt-20">
-			{/* Hero image */}
-			<div className="relative h-72 md:h-96 w-full overflow-hidden">
-				{/* biome-ignore lint/performance/noImgElement: hero cover */}
-				<img
-					src={coverImage}
-					alt={post.title}
-					className="h-full w-full object-cover"
-				/>
-				<div className="absolute inset-0 bg-linear-to-b from-[#0d1a0d]/30 via-transparent to-[#0d1a0d]" />
-			</div>
-
-			{/* Article */}
-			<div className="mx-auto max-w-2xl px-6 -mt-12 relative z-10">
-				{/* Tags */}
-				{post.tags.length > 0 && (
-					<div className="flex flex-wrap gap-2 mb-4">
-						{post.tags.map((t) => (
-							<Link
-								key={t}
-								href={`/blog?tag=${encodeURIComponent(t)}`}
-								className={`rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-opacity hover:opacity-80 ${getTagStyle(t)}`}
-							>
-								{t}
-							</Link>
-						))}
+		<PublicShell>
+			<main className="min-h-screen bg-[linear-gradient(135deg,#f4f9f5_0%,#eef8f1_100%)] pb-24 pt-24 sm:pt-28">
+				{/* Hero image container */}
+				<div className="w-full mb-12">
+					<div className="relative h-[40vh] min-h-[300px] sm:h-[50vh] sm:min-h-[400px] w-full overflow-hidden shadow-lg">
+						{/* biome-ignore lint/performance/noImgElement: hero cover */}
+						<img
+							src={coverImage}
+							alt={post.title}
+							className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+						/>
+						<div className="absolute inset-0 bg-gradient-to-t from-[#0f3d2e]/60 via-[#0f3d2e]/10 to-transparent" />
+						
+						{/* Title inside hero (optional, or outside) - let's keep it outside for editorial feel, but we can put tags here */}
 					</div>
-				)}
-
-				{/* Title */}
-				<h1 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
-					{post.title}
-				</h1>
-
-				{/* Meta */}
-				<div className="flex items-center gap-3 text-xs text-white/35 uppercase tracking-widest mb-10 pb-8 border-b border-white/10">
-					<time dateTime={post.createdAt.toISOString()}>{formattedDate}</time>
-					<span>·</span>
-					<span>
-						{post.comments.length}{" "}
-						{post.comments.length === 1 ? "comment" : "comments"}
-					</span>
 				</div>
 
-				{/* Body */}
-				<article className="space-y-5 mb-16">
-					{paragraphs.map((para, i) => (
-						<p
-							// biome-ignore lint/suspicious/noArrayIndexKey: static paragraphs
-							key={i}
-							className="text-base leading-[1.85] text-white/75"
+				{/* Article */}
+				<div className="mx-auto max-w-3xl px-4 sm:px-6 relative z-10">
+					{/* Tags */}
+					{post.tags.length > 0 && (
+						<div className="flex flex-wrap gap-2 mb-6 justify-center">
+							{post.tags.map((t) => (
+								<Link
+									key={t}
+									href={`/blog?tag=${encodeURIComponent(t)}`}
+									className={`rounded-full px-4 py-1 text-xs font-bold uppercase tracking-wider transition-all hover:-translate-y-0.5 hover:shadow-sm ${getTagStyle(t)}`}
+								>
+									{t}
+								</Link>
+							))}
+						</div>
+					)}
+
+					{/* Title */}
+					<h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#0f3d2e] font-serif leading-[1.1] mb-6 text-center">
+						{post.title}
+					</h1>
+
+					{/* Meta */}
+					<div className="flex items-center justify-center gap-4 text-xs font-semibold text-[#4c6f5e] uppercase tracking-widest mb-12 pb-8 border-b border-[#dcefe3]">
+						<time dateTime={post.createdAt.toISOString()}>{formattedDate}</time>
+						<span className="text-[#dcefe3]">•</span>
+						<span>
+							{post.comments.length}{" "}
+							{post.comments.length === 1 ? "comment" : "comments"}
+						</span>
+					</div>
+
+					{/* Body */}
+					<article className="space-y-6 mb-20 font-serif">
+						{paragraphs.map((para, i) => (
+							<p
+								// biome-ignore lint/suspicious/noArrayIndexKey: static paragraphs
+								key={i}
+								className="text-lg md:text-xl leading-[1.8] text-[#1a2e1a]"
+							>
+								{para}
+							</p>
+						))}
+					</article>
+
+					{/* Back to blog */}
+					<div className="mb-16 border-t border-[#dcefe3] pt-8">
+						<Link
+							href="/blog"
+							className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#1f6f4d] hover:text-[#0f3d2e] transition-colors"
 						>
-							{para}
-						</p>
-					))}
-				</article>
+							<span className="transition-transform duration-300 group-hover:-translate-x-1">←</span> Back to all stories
+						</Link>
+					</div>
 
-				{/* Back to blog */}
-				<div className="mb-12">
-					<Link
-						href="/blog"
-						className="inline-flex items-center gap-2 text-sm text-green-400 hover:text-green-300 transition-colors"
-					>
-						← Back to all stories
-					</Link>
+					{/* Comments section */}
+					<CommentsSection
+						postId={post.id}
+						slug={post.slug}
+						comments={serializedComments}
+					/>
 				</div>
-
-				{/* Comments section */}
-				<CommentsSection
-					postId={post.id}
-					slug={post.slug}
-					comments={serializedComments}
-				/>
-			</div>
-		</main>
+			</main>
+		</PublicShell>
 	);
 }

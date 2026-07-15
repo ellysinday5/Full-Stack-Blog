@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
 
 // ── Welcome toast (fires once after login redirect) ───────────────────────────
@@ -112,6 +112,7 @@ function VerdantLogo() {
 // ── Inner layout (needs usePathname, inside provider) ─────────────────────────
 function AdminShell({ children }: { children: ReactNode }) {
 	const pathname = usePathname();
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 
 	// Login page renders standalone — no sidebar/navbar
 	if (pathname === "/admin/login") {
@@ -122,25 +123,48 @@ function AdminShell({ children }: { children: ReactNode }) {
 		exact ? pathname === href : pathname.startsWith(href);
 
 	return (
-		<div className="flex min-h-screen" style={{ background: "#f4fbf6" }}>
+		<div className="flex min-h-screen relative" style={{ background: "#f4fbf6" }}>
+			{/* Mobile Overlay */}
+			{sidebarOpen && (
+				<button
+					type="button"
+					className="fixed inset-0 z-40 bg-black/50 md:hidden w-full h-full cursor-default"
+					onClick={() => setSidebarOpen(false)}
+					onKeyDown={(e) => e.key === "Escape" && setSidebarOpen(false)}
+					aria-label="Close sidebar"
+				/>
+			)}
+
 			{/* ── Sidebar ── */}
 			<aside
-				className="flex shrink-0 flex-col"
-				style={{ background: "#0f3d2e", minHeight: "100vh", width: "220px" }}
+				className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col transition-transform duration-300 md:static md:w-[220px] md:translate-x-0 ${
+					sidebarOpen ? "translate-x-0" : "-translate-x-full"
+				}`}
+				style={{ background: "#0f3d2e", minHeight: "100vh" }}
 			>
-				<div className="flex items-center justify-center py-7 px-4 border-b border-white/10">
+				<div className="flex items-center justify-between py-7 px-4 border-b border-white/10 md:justify-center">
 					<Link href="/" aria-label="Go home">
 						<VerdantLogo />
 					</Link>
+					<button
+						type="button"
+						onClick={() => setSidebarOpen(false)}
+						className="md:hidden text-white/70 hover:text-white"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
 				</div>
 
-				<nav className="flex-1 py-3">
+				<nav className="flex-1 py-3 overflow-y-auto">
 					{NAV.map(({ label, href, exact }) => {
 						const active = isActive(href, exact);
 						return (
 							<Link
 								key={href}
 								href={href}
+								onClick={() => setSidebarOpen(false)}
 								className={`flex items-center justify-center text-center py-4 px-4 text-sm font-semibold transition-colors ${
 									active
 										? "bg-[#3a6b3a] text-white"
@@ -153,7 +177,7 @@ function AdminShell({ children }: { children: ReactNode }) {
 					})}
 				</nav>
 
-				<div className="border-t border-white/10">
+				<div className="border-t border-white/10 mt-auto">
 					<Link
 						href="/"
 						className="flex items-center gap-2 px-5 py-5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
@@ -167,11 +191,7 @@ function AdminShell({ children }: { children: ReactNode }) {
 							strokeWidth={2}
 							aria-hidden="true"
 						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M15 19l-7-7 7-7"
-							/>
+							<path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
 						</svg>
 						Back to Home
 					</Link>
@@ -181,19 +201,31 @@ function AdminShell({ children }: { children: ReactNode }) {
 			{/* ── Main ── */}
 			<div className="flex-1 flex flex-col min-w-0">
 				<div
-					className="flex h-16 shrink-0 items-center justify-end gap-3 px-6"
+					className="flex h-16 shrink-0 items-center justify-between px-4 sm:px-6 md:justify-end gap-3"
 					style={{ background: "#0f3d2e" }}
 				>
-					<span className="text-sm font-semibold text-white">Admin</span>
-					<div className="w-9 h-9 rounded-full border-2 border-white/30 bg-white/10 flex items-center justify-center text-white/80">
-						<UserCircleIcon />
+					{/* Mobile Hamburger */}
+					<button
+						type="button"
+						onClick={() => setSidebarOpen(true)}
+						className="md:hidden text-white/70 hover:text-white"
+						aria-label="Open sidebar"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+						</svg>
+					</button>
+
+					<div className="flex items-center gap-3">
+						<span className="text-sm font-semibold text-white">Admin</span>
+						<div className="w-9 h-9 rounded-full border-2 border-white/30 bg-white/10 flex items-center justify-center text-white/80">
+							<UserCircleIcon />
+						</div>
 					</div>
 				</div>
 
-				<div className="flex-1 overflow-auto p-8">
-					<Suspense
-						fallback={<div className="p-4 text-[#7a9a7a]">Loading…</div>}
-					>
+				<div className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
+					<Suspense fallback={<div className="p-4 text-[#7a9a7a]">Loading…</div>}>
 						{children}
 					</Suspense>
 				</div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
+import { ConfirmModal } from "@/components/Modal";
 import { deleteCategory } from "../actions";
 
 type CategoryRow = {
@@ -53,32 +54,40 @@ function TagIcon() {
 }
 
 function DeleteButton({ id }: { id: string }) {
-	const [state, action] = useActionState(deleteCategory, {});
+	const [state, action, isPending] = useActionState(deleteCategory, {});
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const formRef = useRef<HTMLFormElement>(null);
 
 	return (
-		<form action={action}>
-			<input type="hidden" name="id" value={id} />
-			<button
-				type="submit"
-				title="Delete category"
-				className="flex h-8 w-8 items-center justify-center rounded-lg text-red-400
-				           hover:bg-red-50 hover:text-red-600 transition-colors"
-				onClick={(e) => {
-					if (
-						!window.confirm(
-							"Delete this category? Posts will be uncategorised.",
-						)
-					) {
-						e.preventDefault();
-					}
+		<>
+			<form ref={formRef} action={action}>
+				<input type="hidden" name="id" value={id} />
+				<button
+					type="button"
+					title="Delete category"
+					className="flex h-8 w-8 items-center justify-center rounded-lg text-red-400
+					           hover:bg-red-50 hover:text-red-600 transition-colors"
+					onClick={() => setConfirmOpen(true)}
+				>
+					<TrashIcon />
+				</button>
+				{state.error && (
+					<p className="text-xs text-red-500 mt-1">{state.error}</p>
+				)}
+			</form>
+			<ConfirmModal
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+				onConfirm={() => {
+					setConfirmOpen(false);
+					formRef.current?.requestSubmit();
 				}}
-			>
-				<TrashIcon />
-			</button>
-			{state.error && (
-				<p className="text-xs text-red-500 mt-1">{state.error}</p>
-			)}
-		</form>
+				title="Delete Category"
+				message="Delete this category? Posts will be uncategorised."
+				confirmLabel="Delete"
+				loading={isPending}
+			/>
+		</>
 	);
 }
 

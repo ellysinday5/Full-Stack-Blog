@@ -16,7 +16,7 @@ export type ModerationState = {
 async function requireAdmin(): Promise<ModerationState | null> {
 	const cookieStore = await cookies();
 	const session = cookieStore.get("admin_session");
-	if (!session || session.value !== "authenticated") {
+	if (session?.value !== "authenticated") {
 		return { error: "Unauthorized. Please log in again." };
 	}
 	return null;

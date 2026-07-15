@@ -3,22 +3,6 @@
 import { useActionState, useEffect, useRef } from "react";
 import { type CategoryState, createCategory } from "../actions";
 
-function PlusIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			className="h-4 w-4"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-			strokeWidth={2.5}
-			aria-hidden="true"
-		>
-			<path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-		</svg>
-	);
-}
-
 const fieldCls =
 	"w-full rounded-lg border border-[#b8ccb8] bg-white px-4 py-2.5 text-sm text-[#1a2e1a] " +
 	"placeholder-[#7a9a7a] focus:border-[#3a6b3a] focus:ring-2 focus:ring-[#3a6b3a]/15 focus:outline-none transition-colors";
@@ -108,7 +92,6 @@ export function CategoryForm() {
 					className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold
 					           text-white bg-[#3a6b3a] hover:bg-[#2d552d] transition-colors active:scale-[0.98]"
 				>
-					<PlusIcon />
 					Add Category
 				</button>
 			</form>

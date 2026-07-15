@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { categories, comments, posts } from "./schema";
+import { categories, comments, posts, settings } from "./schema";
 
 async function seed() {
 	console.log("Seeding database…");
@@ -8,6 +8,7 @@ async function seed() {
 	await db.delete(comments);
 	await db.delete(posts);
 	await db.delete(categories);
+	await db.delete(settings);
 
 	// ── Categories ────────────────────────────────────────────────────────────
 	const insertedCategories = await db
@@ -216,6 +217,14 @@ The Dawn of Everything by David Graeber and David Wengrow upends almost every as
 			authorName: "Charlie",
 			approved: true,
 			body: "The Overstory wrecked me. I cried twice. Haven't been the same in a forest since.",
+		},
+	]);
+
+	// ── Settings ──────────────────────────────────────────────────────────────
+	await db.insert(settings).values([
+		{
+			key: "auto_approve_comments",
+			value: "false",
 		},
 	]);
 

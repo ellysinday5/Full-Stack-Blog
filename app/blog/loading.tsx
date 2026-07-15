@@ -16,10 +16,7 @@ export default function Loading() {
 						))}
 					</div>
 					{/* Search bar */}
-					<div className="mb-8 flex gap-2">
-						<div className="h-9 w-64 rounded-lg border border-[#0f3d2e]/20 bg-white" />
-						<div className="h-9 w-20 rounded-lg border border-[#0f3d2e]/20 bg-white" />
-					</div>
+					<div className="mb-8 h-10 w-full max-w-md rounded-lg border border-[#0f3d2e]/20 bg-white" />
 				</div>
 
 				{/* Post grid skeleton */}

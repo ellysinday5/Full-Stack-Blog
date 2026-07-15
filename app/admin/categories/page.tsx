@@ -4,7 +4,7 @@ import { categories, posts } from "@/lib/db/schema";
 import { CategoryForm } from "./category-form";
 import { CategoryList } from "./category-list";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin | Categories" };
 
 export default async function CategoriesPage() {

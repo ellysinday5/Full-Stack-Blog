@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
 import { ManagePostsTable } from "./manage-posts-table";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin | Manage Posts" };
 
 export default async function ManagePostsPage() {
