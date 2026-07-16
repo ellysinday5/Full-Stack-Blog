@@ -26,6 +26,16 @@ const COVER_IMAGES = [
 	"https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&w=800&h=420&q=80",
 ];
 
+const SLUG_IMAGES: Record<string, string> = {
+	"healing-power-of-waterfalls": "/images/falls.jpg",
+	"why-the-banyan-tree-is-extraordinary": "/images/tree.jpg",
+	"strange-beautiful-world-of-carnivorous-plants": "/images/tree.jpg",
+	"life-in-siargao": "/images/siargao-1.jpg",
+	"siargao-itinerary": "/images/siargao-2.jpg",
+	"the-silent-patient-review": "/images/the-silent-patient.png",
+	"13-reasons-to-stay-review": "/images/13-reasons-to-stay.jpg",
+};
+
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function getExcerpt(body: string, maxLen = 120): string {
@@ -205,7 +215,7 @@ type PostRow = {
 };
 
 function PostCard({ post, index }: { post: PostRow; index: number }) {
-	const coverImage = COVER_IMAGES[index % COVER_IMAGES.length];
+	const coverImage = SLUG_IMAGES[post.slug] ?? COVER_IMAGES[index % COVER_IMAGES.length];
 	const excerpt = getExcerpt(post.body, 100);
 
 	return (

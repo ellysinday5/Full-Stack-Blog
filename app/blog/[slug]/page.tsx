@@ -10,24 +10,18 @@ type PageProps = {
 	params: Promise<{ slug: string }>;
 };
 
-// Per-slug cover images — nature/plant themed
+// Per-slug cover images
 const SLUG_IMAGES: Record<string, string> = {
-	"secret-life-of-mosses":
-		"https://images.unsplash.com/photo-1504198266287-1659872e6590?auto=format&fit=crop&w=1200&q=80",
-	"why-the-banyan-tree-is-extraordinary":
-		"https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
-	"growing-pothos-the-forgiving-indoor-companion":
-		"https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1200&q=80",
-	"amazon-rainforest-lungs-of-the-planet":
-		"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
-	"cherry-blossoms-japans-most-fleeting-beauty":
-		"https://images.unsplash.com/photo-1530968033775-2c92736b131e?auto=format&fit=crop&w=1200&q=80",
-	"small-herb-garden-on-your-windowsill":
-		"https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80",
-	"strange-beautiful-world-of-carnivorous-plants":
-		"https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&w=1200&q=80",
-	"forest-bathing-japanese-art-of-trees":
-		"https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80",
+	// Nature posts
+	"healing-power-of-waterfalls": "/images/falls.jpg",
+	"why-the-banyan-tree-is-extraordinary": "/images/tree.jpg",
+	"strange-beautiful-world-of-carnivorous-plants": "/images/tree.jpg",
+	// Travel posts
+	"life-in-siargao": "/images/siargao-1.jpg",
+	"siargao-itinerary": "/images/siargao-2.jpg",
+	// Book posts
+	"the-silent-patient-review": "/images/the-silent-patient.png",
+	"13-reasons-to-stay-review": "/images/13-reasons-to-stay.jpg",
 };
 
 const FALLBACK_IMAGE =
