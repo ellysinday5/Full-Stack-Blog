@@ -280,7 +280,7 @@ export function CommentActionsMenu({
 						</button>
 
 						{approved ? (
-							<span className="rounded-lg border border-green-300 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
+							<span className="rounded-r-lg rounded-l-sm border-y border-r border-l-4 border-green-300 border-l-green-600 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
 								Already Posted
 							</span>
 						) : (

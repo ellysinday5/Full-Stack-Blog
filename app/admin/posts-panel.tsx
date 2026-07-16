@@ -12,6 +12,19 @@ type PostRow = {
 	createdAt: string;
 };
 
+const SLUG_IMAGES: Record<string, string> = {
+	"healing-power-of-waterfalls": "/images/falls.jpg",
+	"why-the-banyan-tree-is-extraordinary": "/images/tree.jpg",
+	"strange-beautiful-world-of-carnivorous-plants": "/images/tree.jpg",
+	"life-in-siargao": "/images/siargao-1.jpg",
+	"siargao-itinerary": "/images/siargao-2.jpg",
+	"the-silent-patient-review": "/images/the-silent-patient.png",
+	"13-reasons-to-stay-review": "/images/13-reasons-to-stay.jpg",
+};
+
+const FALLBACK_IMAGE =
+	"https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&h=420&q=80";
+
 // ── Single post card ──────────────────────────────────────────────────────────
 function PostCard({ post }: { post: PostRow }) {
 	const excerpt =
@@ -31,12 +44,14 @@ function PostCard({ post }: { post: PostRow }) {
 				? "Archived"
 				: "Draft";
 
+	const coverImage = SLUG_IMAGES[post.slug] ?? FALLBACK_IMAGE;
+
 	return (
 		<div className="rounded-xl border border-[#c4d4c4] bg-white overflow-hidden flex flex-col">
 			{/* Cover image placeholder */}
 			<div className="relative h-40 w-full bg-[#d4e4d4] overflow-hidden">
 				<Image
-					src="/images/background-picture.png"
+					src={coverImage}
 					alt={post.title}
 					fill
 					className="object-cover"
