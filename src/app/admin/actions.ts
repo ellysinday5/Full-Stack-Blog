@@ -135,6 +135,17 @@ export async function updatePost(
 		return { errors: { body: "Missing post ID for update." } };
 	}
 
+	// Only draft posts can be edited — server-side enforcement
+	const existing = await db.query.posts.findFirst({
+		where: eq(posts.id, postId),
+		columns: { status: true },
+	});
+	if (!existing || existing.status !== "draft") {
+		return {
+			errors: { body: "Only draft posts can be edited. Published and archived posts are locked." },
+		};
+	}
+
 	const { title, slug, body, categoryId, status } = parsed.data;
 
 	const coverPhoto = formData.get("coverPhoto") as File | null;

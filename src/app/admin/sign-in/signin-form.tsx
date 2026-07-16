@@ -27,7 +27,7 @@ export function LoginForm({ from }: { from: string }) {
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
-		<form action={formAction} className="space-y-5">
+		<form action={formAction} className="space-y-5" suppressHydrationWarning>
 			<input type="hidden" name="from" value={from} />
 
 			<div>
@@ -37,13 +37,14 @@ export function LoginForm({ from }: { from: string }) {
 				>
 					Password <span className="text-red-400">*</span>
 				</label>
-				<div className="relative">
+				<div className="relative" suppressHydrationWarning>
 					<input
 						id="password"
 						name="password"
 						type={showPassword ? "text" : "password"}
 						autoComplete="current-password"
 						required
+						suppressHydrationWarning
 						className="w-full rounded-lg border border-white/10 bg-[#d4ddd5] px-4 py-3 pr-11
 						           text-sm text-[#1a2e1a] placeholder-[#6a8a6a]
 						           focus:border-green-500/60 focus:outline-none focus:ring-2 focus:ring-green-500/20

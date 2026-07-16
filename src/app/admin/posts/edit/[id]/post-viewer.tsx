@@ -116,28 +116,49 @@ export function PostViewer({ post, categories }: PostViewerProps) {
 					</h1>
 				</div>
 
-				<button
-					type="button"
-					onClick={() => setEditMode(true)}
-					className="shrink-0 flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white bg-[#1a2e1a] hover:bg-[#253e25] transition-colors"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						className="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						strokeWidth={2}
-						aria-hidden="true"
+				{post.status === "draft" ? (
+					<button
+						type="button"
+						onClick={() => setEditMode(true)}
+						className="shrink-0 flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white bg-[#1a2e1a] hover:bg-[#253e25] transition-colors"
 					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-						/>
-					</svg>
-					Edit Post
-				</button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							strokeWidth={2}
+							aria-hidden="true"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+							/>
+						</svg>
+						Edit Post
+					</button>
+				) : (
+					<span className="shrink-0 flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#7a9a7a] bg-[#f0f3ef] border border-[#1a2e1a]/15 cursor-not-allowed select-none">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-4 w-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							strokeWidth={2}
+							aria-hidden="true"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+							/>
+						</svg>
+						Locked — {post.status === "published" ? "Published" : "Archived"}
+					</span>
+				)}
 			</div>
 
 			{/* ── View card ── */}
