@@ -62,7 +62,7 @@ export function Footer() {
 							))}
 							<li>
 								<Link
-									href="/admin/login?from=/admin"
+									href="/admin/sign-in"
 									className="group flex items-center text-sm font-medium text-[#8ca89a] transition-colors hover:text-white"
 								>
 									<span className="mr-2 h-px w-0 bg-[#dff7e9] transition-all duration-300 group-hover:w-4" />

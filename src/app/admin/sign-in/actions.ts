@@ -31,6 +31,14 @@ export async function adminLogin(
 		path: "/",
 		maxAge: 60 * 60 * 8,
 	});
+	// Set a non-HttpOnly cookie for client-side cache busting detection
+	cookieStore.set("admin_active", "1", {
+		httpOnly: false,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+		path: "/",
+		maxAge: 60 * 60 * 8,
+	});
 	// Clear the "logged out" flag (set by adminLogout) so the middleware
 	// allows access again for this new session
 	cookieStore.delete("admin_logged_out");
@@ -46,6 +54,7 @@ export async function adminLogin(
 export async function adminLogout(reason: "logout" | "timeout" = "logout"): Promise<void> {
 	const cookieStore = await cookies();
 	cookieStore.delete("admin_session");
+	cookieStore.delete("admin_active");
 	cookieStore.set("admin_logged_out", "1", {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",

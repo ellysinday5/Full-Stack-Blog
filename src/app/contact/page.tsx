@@ -65,7 +65,7 @@ export default function ContactPage() {
 	return (
 		<div className="flex min-h-screen flex-col bg-[linear-gradient(135deg,#f7fdf9_0%,#eef8f1_100%)]">
 			<Header />
-			<main className="flex-grow pb-20 pt-16">
+			<main className="grow pb-20 pt-16">
 				{/* Hero */}
 				<section className="relative py-32 text-center overflow-hidden">
 					<div className="absolute inset-0 z-0">
@@ -73,7 +73,7 @@ export default function ContactPage() {
 						<img
 							src="https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1920&q=80"
 							alt="Forest"
-							className="w-full h-full object-cover opacity-10"
+							className="size-full object-cover opacity-10"
 						/>
 						<div className="absolute inset-0 bg-gradient-to-b from-[#f7fdf9]/70 to-[#f7fdf9]" />
 					</div>
