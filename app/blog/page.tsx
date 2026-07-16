@@ -1,10 +1,10 @@
-import { asc, desc } from "drizzle-orm";
+import { asc } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
 import { SearchBox } from "@/components/blog/SearchBox";
 import { PublicShell } from "@/components/PublicShell";
 import { db } from "@/lib/db";
-import { categories, posts } from "@/lib/db/schema";
+import { categories } from "@/lib/db/schema";
 
 // export const dynamic = "force-dynamic";
 
@@ -28,7 +28,7 @@ const COVER_IMAGES = [
 
 const SLUG_IMAGES: Record<string, string> = {
 	"healing-power-of-waterfalls": "/images/falls.jpg",
-	"why-the-banyan-tree-is-extraordinary": "/images/tree.jpg",
+	"why-the-banyan-tree-is-extraordinary": "/images/banyan-tree.png",
 	"strange-beautiful-world-of-carnivorous-plants": "/images/tree.jpg",
 	"life-in-siargao": "/images/siargao-1.jpg",
 	"siargao-itinerary": "/images/siargao-2.jpg",
@@ -41,10 +41,6 @@ const SLUG_IMAGES: Record<string, string> = {
 function getExcerpt(body: string, maxLen = 120): string {
 	if (body.length <= maxLen) return body;
 	return `${body.slice(0, maxLen).replace(/\s+\S*$/, "")}…`;
-}
-
-function postHasCategory(postTags: string[], category: string): boolean {
-	return postTags.some((t) => t.toLowerCase() === category.toLowerCase());
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────
@@ -74,17 +70,22 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 				) ?? activeTags[0])
 			: "All Stories";
 
-	const allPosts = await db
-		.select()
-		.from(posts)
-		.orderBy(desc(posts.createdAt))
-		.catch(() => [] as (typeof posts.$inferSelect)[]);
+	const allPosts = await db.query.posts
+		.findMany({
+			orderBy: (p, { desc }) => [desc(p.createdAt)],
+			with: {
+				category: true,
+			},
+		})
+		.catch(() => [] as PostRow[]);
 
 	// Filter by selected category
 	let filteredPosts = allPosts;
 	if (activeTags.length > 0) {
 		filteredPosts = filteredPosts.filter((p) =>
-			activeTags.some((tagValue) => postHasCategory(p.tags, tagValue)),
+			activeTags.some(
+				(tagValue) => p.category?.name.toLowerCase() === tagValue.toLowerCase(),
+			),
 		);
 	}
 
@@ -192,7 +193,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 						) : (
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 								{sortedPosts.map((post, i) => (
-									<PostCard key={post.id} post={post} index={i} />
+									<PostCard
+										key={post.id}
+										post={post}
+										index={i}
+										activeTag={activeTags[0]}
+									/>
 								))}
 							</div>
 						)}
@@ -212,11 +218,26 @@ type PostRow = {
 	body: string;
 	tags: string[];
 	createdAt: Date;
+	category?: {
+		id: string;
+		name: string;
+		slug: string;
+	} | null;
 };
 
-function PostCard({ post, index }: { post: PostRow; index: number }) {
-	const coverImage = SLUG_IMAGES[post.slug] ?? COVER_IMAGES[index % COVER_IMAGES.length];
+function PostCard({
+	post,
+	index,
+	activeTag,
+}: {
+	post: PostRow;
+	index: number;
+	activeTag?: string;
+}) {
+	const coverImage =
+		SLUG_IMAGES[post.slug] ?? COVER_IMAGES[index % COVER_IMAGES.length];
 	const excerpt = getExcerpt(post.body, 100);
+	const postUrl = `/blog/${post.slug}${activeTag ? `?tag=${encodeURIComponent(activeTag)}` : ""}`;
 
 	return (
 		<article
@@ -232,19 +253,28 @@ function PostCard({ post, index }: { post: PostRow; index: number }) {
 					loading={index < 3 ? "eager" : "lazy"}
 					className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
 				/>
-				<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+				<div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 			</div>
 
 			<div className="flex flex-1 flex-col p-6 sm:p-8">
 				<h2 className="font-serif text-2xl font-bold leading-tight text-[#0f3d2e] mb-4 transition-colors group-hover:text-[#1f6f4d]">
-					<Link href={`/blog/${post.slug}`} id={`read-post-${post.id}`} className="focus:outline-none">
+					<Link
+						href={postUrl}
+						id={`read-post-${post.id}`}
+						className="focus:outline-none"
+					>
 						<span className="absolute inset-0" aria-hidden="true" />
 						{post.title}
 					</Link>
 				</h2>
-				<p className="mb-6 flex-1 text-sm leading-relaxed text-[#4c6f5e]">{excerpt}</p>
+				<p className="mb-6 flex-1 text-sm leading-relaxed text-[#4c6f5e]">
+					{excerpt}
+				</p>
 				<div className="mt-auto inline-flex items-center text-xs font-bold uppercase tracking-wider text-[#1f6f4d] transition-colors group-hover:text-[#175a3d]">
-					Read Story <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+					Read Story{" "}
+					<span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
+						→
+					</span>
 				</div>
 			</div>
 		</article>

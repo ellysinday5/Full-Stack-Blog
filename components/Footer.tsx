@@ -25,7 +25,7 @@ export function Footer() {
 				<div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-16">
 					{/* Brand Column */}
 					<div className="lg:col-span-1 flex flex-col items-start">
-						<Link
+						{/* <Link
 							href="/"
 							className="mb-6 inline-block select-none transition-transform duration-300 hover:scale-105"
 						>
@@ -36,10 +36,11 @@ export function Footer() {
 								height={100}
 								className="h-auto w-auto sm:h-28 grayscale-[0.2] brightness-200 contrast-125 hover:grayscale-0 transition-all duration-500"
 							/>
-						</Link>
-						{/* <p className="text-sm leading-relaxed text-[#8ca89a] font-medium">
-							A personal blog celebrating the beauty of nature, the joy of travel, and the wisdom in books.
-						</p> */}
+						</Link> */}
+						<p className="text-sm leading-relaxed text-[#8ca89a] font-medium">
+							A personal blog celebrating the beauty of nature, the joy of
+							travel, and the wisdom in books.
+						</p>
 					</div>
 
 					{/* Quick Links */}
