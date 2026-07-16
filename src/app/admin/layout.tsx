@@ -53,7 +53,7 @@ function UserCircleIcon() {
 
 // ── Nav config ────────────────────────────────────────────────────────────────
 const NAV = [
-	{ label: "Blog Post", href: "/admin", exact: true },
+	{ label: "Dashboard", href: "/admin", exact: true },
 	{ label: "Manage Posts", href: "/admin/posts", exact: false },
 	{ label: "Manage Comments", href: "/admin/comments", exact: false },
 	{ label: "Category", href: "/admin/categories", exact: false },
