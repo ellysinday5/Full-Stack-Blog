@@ -105,19 +105,19 @@ Living in Siargao teaches you the art of slowing down. It’s a place where luxu
 				status: "published" as const,
 				body: `Planning a trip to Siargao? Five days is the perfect amount of time to get a taste of the island's best surf spots, stunning lagoons, and vibrant food scene. Here is an itinerary that balances adventure with relaxation.
 
-**Day 1: Arrival & Cloud 9**
+Day 1: Arrival & Cloud 9
 Arrive at Sayak Airport and head straight to your accommodation in General Luna. Spend the afternoon walking along the famous Cloud 9 boardwalk. Even if you don't surf, watching the pros catch the sunset waves is mesmerizing. Grab dinner at Kermit for some of the best pizza on the island.
 
-**Day 2: Island Hopping (Guyam, Daku, and Naked Island)**
+Day 2: Island Hopping (Guyam, Daku, and Naked Island)
 Book a local boat for the classic three-island tour. Start at Naked Island (a bare sandbar in the middle of the ocean), feast on a boodle fight lunch at Daku Island, and end the afternoon lounging under the palm trees of Guyam Island.
 
-**Day 3: Sugba Lagoon & Magpupungko Rock Pools**
+Day 3: Sugba Lagoon & Magpupungko Rock Pools
 Rent a motorbike and drive north. Your first stop is the turquoise waters of Sugba Lagoon—perfect for paddleboarding and diving off the wooden pontoon. Time your visit to Magpupungko Rock Pools during low tide to swim in the crystal-clear natural infinity pools.
 
-**Day 4: Surf Lesson & Pacifico Beach**
+Day 4: Surf Lesson & Pacifico Beach
 Wake up early for a beginner surf lesson at Jacking Horse. In the afternoon, take a long scenic ride up to Pacifico Beach. The drive through the palm tree roads is arguably as beautiful as the destination itself. Enjoy the quieter, laid-back vibe of the north.
 
-**Day 5: Cafe Hopping & Departure**
+Day 5: Cafe Hopping & Departure
 Spend your last morning café hopping. Try Shaka for a smoothie bowl or Spotted Pig for excellent coffee. Buy some local souvenirs and take one last walk along the beach before heading back to the airport, already planning your return trip.`,
 			},
 

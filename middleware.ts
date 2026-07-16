@@ -3,6 +3,8 @@ import { type NextRequest, NextResponse } from "next/server";
 const ADMIN_SESSION_COOKIE = "admin_session";
 const LOGGED_OUT_COOKIE = "admin_logged_out";
 const SIGN_IN_PATH = "/admin/sign-in";
+// Legacy alias — old code/bookmarks may still use /admin/login
+const LEGACY_LOGIN_PATH = "/admin/login";
 
 // Headers that prevent the browser from caching and restoring admin pages
 // after logout — stops the back-button bypass.
@@ -28,9 +30,7 @@ export function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	// Allow the sign-in page itself through unconditionally
-	if (pathname === SIGN_IN_PATH) {
-		// Even the login page should not be cached so the browser doesn't
-		// restore a stale "already logged in" version on back-nav.
+	if (pathname === SIGN_IN_PATH || pathname === LEGACY_LOGIN_PATH) {
 		return applyNoCacheHeaders(NextResponse.next());
 	}
 

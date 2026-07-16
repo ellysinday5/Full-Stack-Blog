@@ -18,7 +18,7 @@ function WelcomeToast() {
 		if (searchParams.get("welcome") === "1") {
 			toast({
 				variant: "success",
-				title: "Welcome back, Admin! 👋",
+				title: "Welcome back, Admin!",
 				message: "You have successfully accessed the admin panel.",
 			});
 			const url = new URL(window.location.href);
@@ -66,12 +66,25 @@ const NAV = [
 // middleware decide whether the session is still valid. If it is, the middleware
 // passes through; if not, it redirects to sign-in.
 function BfcacheGuard() {
+	const pathname = usePathname();
+
 	useEffect(() => {
+		// Check client-side active session cookie on routing.
+		// If it's missing (e.g. after logout), perform a hard redirect to clean Next.js SPA/client router cache.
+		if (pathname !== "/admin/sign-in" && pathname !== "/admin/login") {
+			const hasActiveSession = document.cookie
+				.split("; ")
+				.some((row) => row.startsWith("admin_active="));
+
+			if (!hasActiveSession) {
+				window.location.replace("/admin/sign-in?reason=logout");
+				return;
+			}
+		}
+
 		function handlePageShow(e: PageTransitionEvent) {
 			if (!e.persisted) return;
 			// Page was restored from bfcache — force a fresh server check.
-			// window.location.replace does a hard navigation (no new history entry)
-			// so the middleware runs and can redirect to sign-in if needed.
 			window.location.replace(window.location.href);
 		}
 
@@ -87,7 +100,7 @@ function BfcacheGuard() {
 			window.removeEventListener("pageshow", handlePageShow);
 			window.removeEventListener("unload", handleUnload);
 		};
-	}, []);
+	}, [pathname]);
 
 	return null;
 }
@@ -104,7 +117,7 @@ function Logo() {
 	);
 }
 
-// ── Loading page (Suspense fallback) ──────────────────────────────────────────
+// ── Loading skeletons — one per route, all match the real UI ─────────────────
 const SHIMMER: React.CSSProperties = {
 	background: "linear-gradient(90deg, #d4e9da 25%, #eaf5ec 50%, #d4e9da 75%)",
 	backgroundSize: "600px 100%",
@@ -112,39 +125,267 @@ const SHIMMER: React.CSSProperties = {
 	borderRadius: 6,
 };
 
-function AdminLoadingPage() {
-	const cards = ["a", "b", "c", "d", "e", "f"] as const;
+const S = (overrides: React.CSSProperties = {}) => ({ ...SHIMMER, ...overrides });
+
+// Shared toolbar skeleton: search pill + two buttons + optional right button
+function ToolbarSkeleton({ rightBtn = false }: { rightBtn?: boolean }) {
 	return (
-		<>
-			<style>{`@keyframes sk-shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}`}</style>
-			<div className="min-h-[80vh] select-none" style={{ background: "#f4fbf6" }}>
-				<div className="mb-6">
-					<div style={{ ...SHIMMER, height: 32, width: 176, marginBottom: 8 }} />
-					<div style={{ ...SHIMMER, height: 16, width: 112, opacity: 0.6 }} />
+		<div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+			<div style={S({ height: 36, width: 220, borderRadius: 999 })} />
+			<div style={S({ height: 36, width: 88, borderRadius: 8 })} />
+			<div style={S({ height: 36, width: 72, borderRadius: 8 })} />
+			{rightBtn && (
+				<div style={{ marginLeft: "auto" }}>
+					<div style={S({ height: 36, width: 100, borderRadius: 8 })} />
 				</div>
-				<div style={{ display: "flex", gap: 12, marginBottom: 32 }}>
-					<div style={{ ...SHIMMER, height: 36, width: 224, borderRadius: 999 }} />
-					<div style={{ ...SHIMMER, height: 36, width: 80, borderRadius: 999 }} />
-					<div style={{ ...SHIMMER, height: 36, width: 80, borderRadius: 999 }} />
-				</div>
-				<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-					{cards.map((id) => (
-						<div key={id} className="overflow-hidden rounded-xl border border-[#c4d4c4] bg-white">
-							<div style={{ ...SHIMMER, height: 160, borderRadius: 0 }} />
-							<div className="p-4 space-y-2">
-								<div style={{ ...SHIMMER, height: 16, width: "75%" }} />
-								<div style={{ ...SHIMMER, height: 12, width: "100%", opacity: 0.7 }} />
-								<div style={{ ...SHIMMER, height: 12, width: "83%", opacity: 0.7 }} />
-								<div style={{ ...SHIMMER, height: 12, width: "66%", opacity: 0.5 }} />
+			)}
+		</div>
+	);
+}
+
+// ── Blog Post (dashboard) skeleton ───────────────────────────────────────────
+// Matches: h1 "Write a post" + toolbar + Recent Activity card grid (3 cols)
+function DashboardSkeleton() {
+	const cards = [0, 1, 2] as const;
+	return (
+		<div className="w-full">
+			{/* h1 */}
+			<div style={S({ height: 28, width: 160, marginBottom: 20 })} />
+			{/* Toolbar */}
+			<ToolbarSkeleton rightBtn />
+			{/* Recent Activity container */}
+			<div className="rounded-xl border-2 border-[#1a2e1a]/20 bg-[#f0f3ef] p-5">
+				{/* "Recent Activity" label */}
+				<div style={S({ height: 14, width: 120, marginBottom: 16 })} />
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					{cards.map((i) => (
+						<div key={i} className="rounded-xl border border-[#c4d4c4] bg-white overflow-hidden">
+							{/* Cover image */}
+							<div style={S({ height: 160, borderRadius: 0 })} />
+							{/* Body */}
+							<div className="p-3 space-y-2">
+								<div style={S({ height: 14, width: "80%" })} />
+								<div style={S({ height: 11, width: "100%", opacity: 0.7 })} />
+								<div style={S({ height: 11, width: "70%", opacity: 0.5 })} />
 							</div>
-							<div className="flex items-center justify-between px-4 pb-4">
-								<div style={{ ...SHIMMER, height: 20, width: 64, borderRadius: 999 }} />
-								<div style={{ ...SHIMMER, height: 16, width: 40 }} />
+							{/* Footer */}
+							<div className="flex items-center justify-between px-3 pb-3 pt-2 border-t border-[#1a2e1a]/10">
+								<div style={S({ height: 18, width: 60, borderRadius: 999 })} />
+								<div style={S({ height: 13, width: 30 })} />
 							</div>
 						</div>
 					))}
 				</div>
 			</div>
+		</div>
+	);
+}
+
+// ── Manage Posts skeleton ────────────────────────────────────────────────────
+// Matches: h1 "Manage Post" + toolbar (search + filter + sort + grid/table toggle) + card grid
+function ManagePostsSkeleton() {
+	const cards = [0, 1, 2, 3, 4, 5] as const;
+	return (
+		<div className="w-full">
+			<div style={S({ height: 28, width: 140, marginBottom: 24 })} />
+			{/* Toolbar: search + filter + sort + view-toggle */}
+			<div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+				<div style={S({ height: 36, width: 220, borderRadius: 999 })} />
+				<div style={S({ height: 36, width: 88, borderRadius: 8 })} />
+				<div style={S({ height: 36, width: 72, borderRadius: 8 })} />
+				<div style={{ marginLeft: "auto" }}>
+					<div style={S({ height: 36, width: 72, borderRadius: 8 })} />
+				</div>
+			</div>
+			{/* 3-col card grid */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+				{cards.map((i) => (
+					<div key={i} className="rounded-xl border border-[#1a2e1a]/20 bg-white overflow-hidden">
+						<div style={S({ height: 176, borderRadius: 0 })} />
+						<div className="p-3 space-y-2">
+							<div style={S({ height: 14, width: "75%" })} />
+							<div style={S({ height: 11, width: "60%", opacity: 0.6 })} />
+							<div style={S({ height: 10, width: "40%", opacity: 0.4 })} />
+						</div>
+						<div className="flex items-center justify-between px-3 pb-3 pt-2 border-t border-[#1a2e1a]/10">
+							<div style={S({ height: 18, width: 64, borderRadius: 999 })} />
+							<div style={S({ height: 13, width: 30 })} />
+						</div>
+					</div>
+				))}
+			</div>
+			<div style={S({ height: 11, width: 80, marginTop: 16, opacity: 0.5 })} />
+		</div>
+	);
+}
+
+// ── Manage Comments skeleton ──────────────────────────────────────────────────
+// Matches: h1 + AutoApproveToggle on the right + CommentsTable (rows)
+function CommentsSkeleton() {
+	const rows = [0, 1, 2, 3, 4, 5] as const;
+	return (
+		<div className="w-full">
+			{/* Header row: h1 + toggle */}
+			<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
+				<div style={S({ height: 28, width: 180 })} />
+				{/* AutoApproveToggle pill */}
+				<div style={S({ height: 48, width: 260, borderRadius: 12 })} />
+			</div>
+			{/* Table */}
+			<div className="rounded-xl border border-[#1a2e1a]/20 bg-white overflow-hidden">
+				{/* Table header */}
+				<div className="bg-[#f0f3ef] px-4 py-3 grid grid-cols-5 gap-4 border-b border-[#1a2e1a]/15">
+					{[80, 100, 120, 80, 60].map((w, i) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton
+						<div key={i} style={S({ height: 11, width: w })} />
+					))}
+				</div>
+				{/* Rows */}
+				{rows.map((i) => (
+					<div key={i} className="px-4 py-3.5 grid grid-cols-5 gap-4 border-b border-[#1a2e1a]/8 last:border-0">
+						<div style={S({ height: 13, width: "85%" })} />
+						<div style={S({ height: 13, width: "70%", opacity: 0.7 })} />
+						<div style={S({ height: 13, width: "80%", opacity: 0.7 })} />
+						<div style={S({ height: 20, width: 60, borderRadius: 999, opacity: 0.6 })} />
+						<div style={S({ height: 28, width: 28, borderRadius: 6, opacity: 0.5 })} />
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+
+// ── Categories skeleton ───────────────────────────────────────────────────────
+// Matches: h1 + subtitle + side-by-side layout (form left, table right)
+function CategoriesSkeleton() {
+	const tableRows = [0, 1, 2, 3] as const;
+	return (
+		<div className="w-full">
+			{/* h1 + subtitle */}
+			<div style={{ marginBottom: 24 }}>
+				<div style={S({ height: 28, width: 120, marginBottom: 6 })} />
+				<div style={S({ height: 13, width: 280, opacity: 0.6 })} />
+			</div>
+			<div style={{ display: "flex", gap: 32, alignItems: "flex-start" }}>
+				{/* Form (left, w-80) */}
+				<div style={{ width: 320, flexShrink: 0 }}>
+					<div className="rounded-xl border border-[#c4d4c4] bg-white p-5 space-y-4">
+						<div style={S({ height: 16, width: 140 })} />
+						<div>
+							<div style={S({ height: 11, width: 60, marginBottom: 6 })} />
+							<div style={S({ height: 36, width: "100%", borderRadius: 8 })} />
+						</div>
+						<div>
+							<div style={S({ height: 11, width: 40, marginBottom: 6 })} />
+							<div style={S({ height: 36, width: "100%", borderRadius: 8 })} />
+						</div>
+						<div>
+							<div style={S({ height: 11, width: 80, marginBottom: 6 })} />
+							<div style={S({ height: 60, width: "100%", borderRadius: 8 })} />
+						</div>
+						<div style={S({ height: 36, width: "100%", borderRadius: 8 })} />
+					</div>
+				</div>
+				{/* Table (right, flex-1) */}
+				<div style={{ flex: 1, minWidth: 0 }}>
+					<div className="rounded-xl border border-[#c4d4c4] overflow-hidden bg-white">
+						{/* Table header */}
+						<div className="bg-[#f4f8f4] px-5 py-3 grid grid-cols-4 gap-4 border-b border-[#c4d4c4]">
+							{[70, 90, 120, 40].map((w, i) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: skeleton
+								<div key={i} style={S({ height: 11, width: w })} />
+							))}
+						</div>
+						{tableRows.map((i) => (
+							<div key={i} className="px-5 py-3.5 grid grid-cols-4 gap-4 border-b border-[#e8f0e8] last:border-0">
+								<div style={S({ height: 14, width: "80%" })} />
+								<div style={S({ height: 13, width: "70%", opacity: 0.6 })} />
+								<div style={S({ height: 13, width: "90%", opacity: 0.5 })} />
+								<div style={{ display: "flex", justifyContent: "center" }}>
+									<div style={S({ height: 28, width: 28, borderRadius: 8, opacity: 0.5 })} />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// ── View Post skeleton ────────────────────────────────────────────────────────
+// Matches: back button + title + Edit Post button + view card
+function ViewPostSkeleton() {
+	return (
+		<div className="w-full">
+			{/* Header row */}
+			<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, gap: 16 }}>
+				<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+					<div style={S({ height: 20, width: 60 })} />
+					<div style={S({ height: 28, width: 200 })} />
+				</div>
+				<div style={S({ height: 36, width: 100, borderRadius: 8 })} />
+			</div>
+			{/* View card */}
+			<div className="rounded-xl border border-[#1a2e1a]/20 bg-[#f0f3ef] p-6 space-y-6">
+				{/* Status + date */}
+				<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+					<div style={S({ height: 22, width: 80, borderRadius: 999 })} />
+					<div style={S({ height: 13, width: 140, opacity: 0.5 })} />
+				</div>
+				{/* Title + Slug grid */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+					<div>
+						<div style={S({ height: 11, width: 40, marginBottom: 6 })} />
+						<div style={S({ height: 20, width: "90%" })} />
+					</div>
+					<div>
+						<div style={S({ height: 11, width: 35, marginBottom: 6 })} />
+						<div style={S({ height: 36, width: "100%", borderRadius: 8 })} />
+					</div>
+				</div>
+				{/* Cover image */}
+				<div>
+					<div style={S({ height: 11, width: 80, marginBottom: 6 })} />
+					<div style={S({ height: 192, width: "100%", borderRadius: 8 })} />
+				</div>
+				{/* Category */}
+				<div>
+					<div style={S({ height: 11, width: 65, marginBottom: 6 })} />
+					<div style={S({ height: 16, width: 100 })} />
+				</div>
+				{/* Content */}
+				<div>
+					<div style={S({ height: 11, width: 60, marginBottom: 6 })} />
+					<div style={S({ height: 200, width: "100%", borderRadius: 8 })} />
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// ── Route-aware loading page ──────────────────────────────────────────────────
+function AdminLoadingPage() {
+	const pathname = usePathname();
+
+	let skeleton: React.ReactNode;
+	if (pathname.startsWith("/admin/posts/edit")) {
+		skeleton = <ViewPostSkeleton />;
+	} else if (pathname.startsWith("/admin/posts")) {
+		skeleton = <ManagePostsSkeleton />;
+	} else if (pathname.startsWith("/admin/comments")) {
+		skeleton = <CommentsSkeleton />;
+	} else if (pathname.startsWith("/admin/categories")) {
+		skeleton = <CategoriesSkeleton />;
+	} else {
+		// /admin (dashboard)
+		skeleton = <DashboardSkeleton />;
+	}
+
+	return (
+		<>
+			<style>{`@keyframes sk-shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}`}</style>
+			<div className="w-full select-none">{skeleton}</div>
 		</>
 	);
 }
@@ -351,7 +592,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 			<Suspense fallback={null}>
 				<WelcomeToast />
 			</Suspense>
-			<Suspense fallback={<AdminLoadingPage />}>
+			{/* AdminShell itself uses usePathname so it needs Suspense;
+			    use null fallback here — the inner Suspense handles page skeletons */}
+			<Suspense fallback={null}>
 				<AdminShell>{children}</AdminShell>
 			</Suspense>
 		</ToastProvider>

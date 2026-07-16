@@ -3,10 +3,20 @@
 import { put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { categories, posts } from "@/lib/db/schema";
+
+async function requireAdmin() {
+	const cookieStore = await cookies();
+	const session = cookieStore.get("admin_session");
+	const loggedOut = cookieStore.get("admin_logged_out");
+	if (loggedOut?.value === "1" || session?.value !== "authenticated") {
+		throw new Error("Unauthorized access. Session expired or logged out.");
+	}
+}
 
 // ── Create Post ───────────────────────────────────────────────────────────────
 
@@ -38,6 +48,7 @@ export async function createPost(
 	_prevState: CreatePostState,
 	formData: FormData,
 ): Promise<CreatePostState> {
+	await requireAdmin();
 	const parsed = createSchema.safeParse({
 		title: formData.get("title"),
 		slug: formData.get("slug"),
@@ -98,6 +109,7 @@ export async function updatePost(
 	_prevState: CreatePostState,
 	formData: FormData,
 ): Promise<CreatePostState> {
+	await requireAdmin();
 	const parsed = createSchema.safeParse({
 		title: formData.get("title"),
 		slug: formData.get("slug"),
@@ -172,6 +184,7 @@ export async function updatePostStatus(
 	_prevState: UpdatePostStatusState,
 	formData: FormData,
 ): Promise<UpdatePostStatusState> {
+	await requireAdmin();
 	const postId = formData.get("postId") as string;
 	const status = formData.get("status") as PostStatus;
 
@@ -196,6 +209,7 @@ export async function deletePost(
 	_prevState: DeletePostState,
 	formData: FormData,
 ): Promise<DeletePostState> {
+	await requireAdmin();
 	const postId = formData.get("postId") as string;
 	if (!postId) return { error: "Missing post ID." };
 
@@ -235,6 +249,7 @@ export async function createCategory(
 	_prevState: CategoryState,
 	formData: FormData,
 ): Promise<CategoryState> {
+	await requireAdmin();
 	const parsed = categorySchema.safeParse({
 		name: formData.get("name"),
 		slug: formData.get("slug"),
@@ -268,6 +283,7 @@ export async function deleteCategory(
 	_prevState: { success?: boolean; error?: string },
 	formData: FormData,
 ): Promise<{ success?: boolean; error?: string }> {
+	await requireAdmin();
 	const id = formData.get("id") as string;
 	if (!id) return { error: "Missing ID." };
 	await db.delete(categories).where(eq(categories.id, id));
