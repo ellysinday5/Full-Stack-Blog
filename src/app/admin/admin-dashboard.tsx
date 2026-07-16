@@ -87,7 +87,7 @@ export function AdminDashboard({ posts, categories }: AdminDashboardProps) {
 		// biome-ignore lint/a11y/noStaticElementInteractions: click handler only closes dropdowns
 		<div className="w-full" onClick={handleBodyClick}>
 			{/* Page heading */}
-			<h1 className="text-2xl font-bold text-[#1a2e1a] mb-5">Write a post</h1>
+			{/* <h1 className="text-2xl font-bold text-[#1a2e1a] mb-5">Write a post</h1> */}
 
 			{/* Toolbar */}
 			<div className="flex items-center gap-3 flex-wrap mb-6">
