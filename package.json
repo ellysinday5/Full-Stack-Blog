@@ -10,7 +10,7 @@
 		"db:generate": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs generate",
 		"db:migrate": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs migrate",
 		"db:studio": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs studio",
-		"db:seed": "node --env-file=.env.local --import tsx lib/db/seed.ts"
+		"db:seed": "node --env-file=.env.local --import tsx src/lib/db/seed.ts"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.6.0",
