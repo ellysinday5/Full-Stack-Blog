@@ -1,20 +1,13 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1784082496025,
-			"tag": "0000_aspiring_wiccan",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1784192272280,
-			"tag": "0001_aromatic_rumiko_fujikawa",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1784222998610,
+      "tag": "0000_fantastic_ben_parker",
+      "breakpoints": true
+    }
+  ]
 }

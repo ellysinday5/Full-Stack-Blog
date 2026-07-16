@@ -28,6 +28,8 @@ CREATE TABLE "posts" (
 	"tags" text[] DEFAULT '{}' NOT NULL,
 	"status" text DEFAULT 'published' NOT NULL,
 	"category_id" uuid,
+	"cover_image" text,
+	"deleted_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "posts_slug_unique" UNIQUE("slug")
 );
