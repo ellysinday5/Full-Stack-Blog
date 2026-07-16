@@ -1,6 +1,6 @@
 {
-	"id": "523f3ab7-82c2-438f-8c87-376ea1f0fd9b",
-	"prevId": "00000000-0000-0000-0000-000000000000",
+	"id": "7469d559-95a6-4427-bd6a-db425084e570",
+	"prevId": "523f3ab7-82c2-438f-8c87-376ea1f0fd9b",
 	"version": "7",
 	"dialect": "postgresql",
 	"tables": {
@@ -188,6 +188,18 @@
 				"category_id": {
 					"name": "category_id",
 					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"cover_image": {
+					"name": "cover_image",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"deleted_at": {
+					"name": "deleted_at",
+					"type": "timestamp",
 					"primaryKey": false,
 					"notNull": false
 				},
