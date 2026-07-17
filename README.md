@@ -70,13 +70,13 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 The seed script (`lib/db/seed.ts`) inserts the following content:
 
 **Posts (7 total):**
-- Building My First Full-Stack Blog with Next.js and Drizzle
-- Why I Only Trust a Moka Pot Before 9 AM
-- The Case for Reheated Pizza Over Fresh
-- My Slow Descent into Matcha Obsession
-- Three Months of Learning Spanish and What Actually Stuck
-- Why My Houseplants Keep Surviving Despite My Neglect
-- The Snack I Judge People For Not Liking
+- Why the Banyan Tree Is Extraordinary
+- The Healing Power of Waterfalls
+- The Strange, Beautiful World of Carnivorous Plants
+- Life in Siargao: More Than Just Surfing
+- The Ultimate 5-Day Siargao Itinerary
+- The Silent Patient: A Thriller That Truly Delivers
+- 13 Reasons to Stay: A Gentle Reminder of Hope
 
 **Sample comments** are also seeded against several posts for development and UI testing purposes.
 
