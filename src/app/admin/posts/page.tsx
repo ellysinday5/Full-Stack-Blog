@@ -1,15 +1,11 @@
-import { desc, eq, isNull } from "drizzle-orm";
 import { connection } from "next/server";
 import { db } from "@/lib/db";
-import { categories, posts } from "@/lib/db/schema";
+import { posts, categories } from "@/lib/db/schema";
+import { desc, eq, isNull } from "drizzle-orm";
 import { ManagePostsTable } from "./manage-posts-table";
 
-// export const dynamic = "force-dynamic";
-export const metadata = { title: "Admin | Manage Posts" };
-
-export default async function ManagePostsPage() {
-	await connection();
-	const allPosts = await db
+async function fetchPosts() {
+	return db
 		.select({
 			id: posts.id,
 			title: posts.title,
@@ -20,20 +16,53 @@ export default async function ManagePostsPage() {
 			categoryName: categories.name,
 		})
 		.from(posts)
-		.where(isNull(posts.deletedAt))
 		.leftJoin(categories, eq(posts.categoryId, categories.id))
+		.where(isNull(posts.deletedAt))
 		.orderBy(desc(posts.createdAt));
+}
 
-	const serialized = allPosts.map((p) => ({
-		...p,
-		createdAt: p.createdAt.toISOString(),
-		categoryName: p.categoryName ?? null,
+export default async function ManagePostsPage() {
+	await connection();
+
+	let rawPosts: Awaited<ReturnType<typeof fetchPosts>> = [];
+	let dbNotReady = false;
+
+	try {
+		rawPosts = await fetchPosts();
+	} catch (e) {
+		// Table not migrated yet (pre-demo state) — show empty instead of crashing
+		console.error("Posts table not ready:", e);
+		rawPosts = [];
+		dbNotReady = true;
+	}
+
+	// ManagePostsTable expects createdAt as a string, tags as string[]
+	const posts = rawPosts.map((p) => ({
+		id: p.id,
+		title: p.title,
+		slug: p.slug,
+		tags: p.tags ?? [],
+		status: p.status,
+		createdAt:
+			p.createdAt instanceof Date
+				? p.createdAt.toISOString()
+				: String(p.createdAt),
+		categoryName: p.categoryName,
 	}));
 
 	return (
-		<div className="w-full">
-			<h1 className="text-2xl font-bold text-[#1a2e1a] mb-6">Manage Post</h1>
-			<ManagePostsTable posts={serialized} />
+		<div className="p-6">
+			<div className="mb-6 flex items-center justify-between">
+				<h1 className="text-2xl font-semibold text-[#1a2e1a]">Manage Posts</h1>
+			</div>
+
+			{dbNotReady && (
+				<div className="mb-4 rounded-md border border-yellow-300 bg-yellow-50 px-4 py-2 text-sm text-yellow-800">
+					Database not initialized yet — run migrations to load posts.
+				</div>
+			)}
+
+			<ManagePostsTable posts={posts} />
 		</div>
 	);
 }
